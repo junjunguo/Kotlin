@@ -30,6 +30,9 @@ Learn Kotlin Programming Language
 - [Kotlin programmer dictionary: Statement vs Expression](https://blog.kotlin-academy.com/kotlin-programmer-dictionary-statement-vs-expression-e6743ba1aaa0)
 - [Kotlin Programmer Dictionary: Function Type vs Function literal vs Lambda expression vs Anonymous function](https://blog.kotlin-academy.com/kotlin-programmer-dictionary-function-type-vs-function-literal-vs-lambda-expression-vs-anonymous-edc97e8873e)
 
+#### Kotlin Tutorial 12 
+- [Kotlin Tutorial 12 — Encapsulation And Polymorphism](https://kotlinlang.org/docs/reference/visibility-modifiers.html)
+
 #### Kotlin performances
 - [Kotlin's hidden costs - Benchmarks](https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks)
 
