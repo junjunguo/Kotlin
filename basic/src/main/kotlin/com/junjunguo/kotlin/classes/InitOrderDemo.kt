@@ -1,4 +1,4 @@
-package kotlin.junjunguo.com.classes
+package com.junjunguo.kotlin.classes
 
 class InitOrderDemo(name: String) {
     val firstProperty = "First : $name".also(::println)

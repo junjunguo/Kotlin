@@ -8,6 +8,68 @@ Learn Kotlin Programming Language
 ### Kotlin programming language docs
 #### [Kotlin basic](https://kotlinlang.org/docs/reference/basic-types.html)
 #### [Class and Inheritance](https://kotlinlang.org/docs/reference/classes.html)
+##### [Visibility Modifiers](https://kotlinlang.org/docs/reference/visibility-modifiers.html)
+> Classes, objects, interfaces, constructors, functions, properties and their setters can have visibility modifiers. (Getters always have the same visibility as the property.) 
+
+There are four visibility modifiers in Kotlin: 
+- private: `only be visible inside the file containing the declaration`
+- protected: `is not available for top-level declarations`
+- internal: `is visible everywhere in the same module`
+- public. 
+
+The default visibility, used if there is no explicit modifier, is public.
+
+Packages:
+
+```kotlin
+// file name: example.kt
+package foo
+
+private fun foo() {} // visible inside example.kt
+
+public var bar: Int = 5 // property is visible everywhere
+    private set         // setter is visible only in example.kt
+    
+internal val baz = 6    // visible inside the same module
+```
+
+**Classes and Interfaces:**
+For members declared inside a class:
+
+- `private` means visible inside this class only (including all its members);
+- `protected` — same as private + visible in subclasses too;
+- `internal` — any client inside this module who sees the declaring class sees its internal members;
+- `public` — any client who sees the declaring class sees its public members.
+
+```kotlin
+open class Outer {
+    private val a = 1
+    protected open val b = 2
+    internal val c = 3
+    val d = 4  // public by default
+    
+    protected class Nested {
+        public val e: Int = 5
+    }
+}
+
+class Subclass : Outer() {
+    // a is not visible
+    // b, c and d are visible
+    // Nested and e are visible
+
+    override val b = 5   // 'b' is protected
+}
+
+class Unrelated(o: Outer) {
+    // o.a, o.b are not visible
+    // o.c and o.d are visible (same module)
+    // Outer.Nested is not visible, and Nested::e is not visible either 
+}
+```
+
+
+
 #### [Functions and Lambdas](https://kotlinlang.org/docs/reference/functions.html)
 #### [Comparison to Java Programming Language](https://kotlinlang.org/docs/reference/comparison-to-java.html)
 #### Others
@@ -130,5 +192,18 @@ typealias MouseClickHandler = (Any, MouseEvent) -> Unit
 typealias PersonIndex = Map<String, Person>
 ```
 
+## Gradle
+> Gradle is a build tool with a focus on build automation and support for multi-language development. If you are building, testing, publishing, and deploying software on any platform, Gradle offers a flexible model that can support the entire development lifecycle from compiling and packaging code to publishing web sites. Gradle has been designed to support build automation across multiple languages and platforms including Java, Scala, Android, C/C++, and Groovy, and is closely integrated with development tools and continuous integration servers including Eclipse, IntelliJ, and Jenkins.
 
+#### [Kotlin meets Gradle](https://blog.gradle.org/kotlin-meets-gradle)
+#### [Gradle Kotlin DSL](https://github.com/gradle/kotlin-dsl)
+> The Gradle Kotlin DSL provides support for writing Gradle build scripts using JetBrains' Kotlin language. It aims to provide Gradle users with a rich, flexible and statically-typed approach to developing build logic in conjunction with the best IDE and tooling experience possible.
+
+## Spring
+
+### Spring Boot with Kotlin
+#### [Spring blog: Developing Spring Boot applications with Kotlin](https://spring.io/blog/2016/02/15/developing-spring-boot-applications-with-kotlin)
+- [demo](https://github.com/sdeleuze/spring-boot-kotlin-demo)
+
+#### [Introducing Kotlin support in Spring Framework 5.0](https://spring.io/blog/2017/01/04/introducing-kotlin-support-in-spring-framework-5-0)
 
