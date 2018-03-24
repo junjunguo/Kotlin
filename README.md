@@ -6,6 +6,7 @@ Learn Kotlin Programming Language
 ## Resources
 
 ### Kotlin programming language docs
+#### [Using Kotlin for Server-side Development](https://kotlinlang.org/docs/reference/server-overview.html)
 #### [Kotlin basic](https://kotlinlang.org/docs/reference/basic-types.html)
 #### [Class and Inheritance](https://kotlinlang.org/docs/reference/classes.html)
 ##### [Visibility Modifiers](https://kotlinlang.org/docs/reference/visibility-modifiers.html)
