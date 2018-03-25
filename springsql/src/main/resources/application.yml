@@ -1,0 +1,28 @@
+## Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/springsql_db
+    username: junjunguo
+    password: junjunguo
+    driver-class-name: org.postgresql.Driver
+    platform: postgresql
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop  # DDL mode. shortcut for "hibernate.hbm2ddl.auto" property.
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        order_updates: true
+        generate_statistics: true
+    generate-ddl: true
+
+logging:
+  level:
+    root: error
+    org:
+      springframework:
+        security: error
+        web: error
+      hibernate: debug
+  file: /Users/Junjun/Repository/logs/logs.log
