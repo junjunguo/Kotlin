@@ -11,6 +11,15 @@
     
 ## PostgreSQL
 
+### basic:
+- `\?` list all the commands
+- `\l` list databases
+- `\conninfo` display information about current connection
+- `\c [DBNAME]` connect to new database, e.g., \c template1
+- `\dt` list tables
+- `\q` quit psql
+
+
 mac install via `Brew`
 
 1. `brew doctor`
