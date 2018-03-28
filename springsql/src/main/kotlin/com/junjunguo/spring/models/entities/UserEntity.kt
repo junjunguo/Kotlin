@@ -7,15 +7,15 @@ import javax.persistence.Id
 
 
 @Entity
-//@Table(name = "user") // java persistence table error.
+//@Table(name = "`User`") // java persistence table error. can not save error.
 data class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    var email: String="",
-    var name: String="",
-    var password: String=""
+    var email: String = "",
+    var name: String = "",
+    var password: String = ""
 //    @CreationTimestamp
 //    var modified: Date = Date(),
 //    @UpdateTimestamp

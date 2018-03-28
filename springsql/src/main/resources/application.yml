@@ -9,7 +9,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update  # DDL mode. shortcut for "hibernate.hbm2ddl.auto" property.
+      ddl-auto: create-drop  # DDL mode. shortcut for "hibernate.hbm2ddl.auto" property.
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL82Dialect
