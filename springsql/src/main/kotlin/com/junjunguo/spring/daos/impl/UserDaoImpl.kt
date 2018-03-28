@@ -12,6 +12,20 @@ import javax.persistence.PersistenceContext
 @Repository
 @Transactional
 class UserDaoImpl : UserDao {
+    override fun getById(id: Long): UserEntity {
+        return em.find(UserEntity::class.java, id)
+    }
+
+    override fun delete(id: Long) {
+        em.remove(em.find(UserEntity::class.java, id))
+    }
+
+    override fun edit(user: User): UserEntity {
+        var ue = em.find(UserEntity::class.java, user.id)
+        ue.email = user.email
+        ue.name = user.name
+        return em.merge(ue)
+    }
 
     @PersistenceContext
     private lateinit var em: EntityManager

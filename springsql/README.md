@@ -8,6 +8,15 @@
     - JPA: Java Persistence API including spring-data-jpa, spring-orm and Hibernate
     - PostgreSQL: PostgreSQL jdbc driver
     
+###layers:
+- controller
+- service
+    - serviceImpl
+- dao
+    - daoImpl   
+- models
+    - apiModels
+    - entities
     
 ## PostgreSQL
 

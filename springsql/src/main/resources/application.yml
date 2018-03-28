@@ -10,9 +10,11 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop  # DDL mode. shortcut for "hibernate.hbm2ddl.auto" property.
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL82Dialect
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
         order_updates: true
         generate_statistics: true
         temp:
