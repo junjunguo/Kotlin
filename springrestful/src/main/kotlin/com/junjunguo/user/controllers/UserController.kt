@@ -5,13 +5,13 @@ import com.junjunguo.user.services.UserService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-//@RequestMapping("/")
+@RequestMapping("/user/")
 class UserController(private val service: UserService) {
 
-    @GetMapping("/id/{id}")
+    @GetMapping("id/{id}")
     fun getUser(@PathVariable id: Long) = service.getById(id)
 
-    @PutMapping("/update")
+    @PutMapping("update")
     fun updateUser(@RequestBody user: UserModel): UserModel? {
         val id = user.id ?: -1
         if (id > -1)
@@ -19,9 +19,12 @@ class UserController(private val service: UserService) {
         return null
     }
 
-    @GetMapping("/all")
+    @GetMapping("all")
     fun getAll() = this.service.getAll()
 
-    @PostMapping("/add")
-    fun add(@RequestBody userModel: UserModel) = this.service.add(userModel)
+    @PostMapping("add")
+    fun add(@RequestBody userModel: UserModel) = service.add(userModel)
+
+    @DeleteMapping("id/{id}")
+    fun delete(@PathVariable id: Long) = service.delete(id)
 }

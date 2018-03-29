@@ -9,16 +9,27 @@
     - PostgreSQL: PostgreSQL jdbc driver
     
 ###layers:
-- controller
-- service
-    - serviceImpl
-- repository / repositoryCustomer
-    - repositoryCustomerImpl
-- models
-    - apiModels
-    - entities
-    
-## PostgreSQL
+#### controller
+#### service
+- serviceImpl
+#### repository / repositoryCustomer
+- repositoryCustomerImpl
+#### models
+- apiModels
+- entities
+   
+## Database   
+### PostgreSQL
+
+#### table naming:
+- [Postgre SQL Syntax](https://www.postgresql.org/docs/10/static/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS)
+    - Key words and unquoted identifiers are `case insensitive`
+- use plural nouns for table names
+- use lower case
+- use underscores
+- `CREATE TABLE my_first_table`, `CREATE TABLE products` : [Postgre SQL doc](https://www.postgresql.org/docs/10/static/ddl-basics.html)
+
+
 
 log in as postgres user:
 ```bash

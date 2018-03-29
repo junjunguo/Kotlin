@@ -48,7 +48,7 @@ dependencies {
     compile('com.fasterxml.jackson.module:jackson-module-kotlin')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
     runtime('org.springframework.boot:spring-boot-devtools')
-    runtime('org.postgresql:postgresql')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

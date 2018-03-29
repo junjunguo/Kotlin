@@ -7,4 +7,5 @@ interface UserService {
     fun updateUser(id: Long, user: UserModel): UserModel
     fun getAll(): List<UserModel>
     fun add(userModel: UserModel): UserModel
+    fun delete(id: Long)
 }

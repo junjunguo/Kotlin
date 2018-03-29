@@ -1,4 +1,4 @@
-## Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/springsql_db
@@ -6,10 +6,19 @@ spring:
     password: junjunguo
     driver-class-name: org.postgresql.Driver
     platform: postgresql
+  # JPA (JpaBaseConfiguration, HibernateJpaAutoConfiguration)
+  data:
+    jpa:
+      repositories:
+        enabled: true # Whether to enable JPA repositories.
   jpa:
     show-sql: true
+    generate-ddl: false # Whether to initialize the schema on startup.
     hibernate:
-      ddl-auto: create-drop  # DDL mode. shortcut for "hibernate.hbm2ddl.auto" property.
+      ddl-auto: create-drop
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL95Dialect
@@ -17,9 +26,15 @@ spring:
         generate_statistics: true
         temp:
           use_jdbc_metadata_defaults: false
-    generate-ddl: true
+
+# CORE PROPERTIES
+debug: false # Enable debug logs.
+trace: false # Enable trace logs.
 
 logging:
+  file: /Users/Junjun/Repository/logs/logs.log
+  pattern:
+    dateformat: yyyy.MM.dd HH:mm:ss.SSS
   level:
     root: error
     org:
@@ -27,4 +42,3 @@ logging:
         security: error
         web: error
       hibernate: debug
-#  file: /Users/Junjun/Repository/logs/logs.log
