@@ -1,6 +1,7 @@
 package com.junjunguo.user.controllers
 
 import com.junjunguo.user.models.api.UserModel
+import com.junjunguo.user.models.api.UserRegisterModel
 import com.junjunguo.user.services.UserService
 import org.springframework.web.bind.annotation.*
 
@@ -27,4 +28,7 @@ class UserController(private val service: UserService) {
 
     @DeleteMapping("id/{id}")
     fun delete(@PathVariable id: Long) = service.delete(id)
+
+    @PostMapping("register")
+    fun register(@RequestBody user: UserRegisterModel) = service.register(user)
 }

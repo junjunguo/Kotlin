@@ -13,7 +13,7 @@ spring:
         enabled: true # Whether to enable JPA repositories.
   jpa:
     show-sql: true
-    generate-ddl: false # Whether to initialize the schema on startup.
+    generate-ddl: true # Whether to initialize the schema on startup.
     hibernate:
       ddl-auto: create-drop
       naming:
@@ -26,6 +26,10 @@ spring:
         generate_statistics: true
         temp:
           use_jdbc_metadata_defaults: false
+  # FLYWAY (FlywayProperties)
+  flyway:
+    enabled: false
+    baseline-on-migrate: false
 
 # CORE PROPERTIES
 debug: false # Enable debug logs.
@@ -39,6 +43,8 @@ logging:
     root: error
     org:
       springframework:
-        security: error
+        security:
+          oauth2: debug
         web: error
       hibernate: debug
+

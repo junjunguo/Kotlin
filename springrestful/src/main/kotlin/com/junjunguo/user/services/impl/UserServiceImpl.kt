@@ -1,13 +1,18 @@
 package com.junjunguo.user.services.impl
 
 import com.junjunguo.user.models.api.UserModel
+import com.junjunguo.user.models.api.UserRegisterModel
 import com.junjunguo.user.models.entities.UserEntity
 import com.junjunguo.user.repositories.UserRepository
 import com.junjunguo.user.services.UserService
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
 
 @Service
-class UserServiceImpl(private val repo: UserRepository) : UserService {
+@Transactional
+class UserServiceImpl(private val repo: UserRepository, private val passwordEncoder: PasswordEncoder) : UserService {
 
     override fun getAll() = repo.findAll().map { UserModel(it) }
 
@@ -27,11 +32,16 @@ class UserServiceImpl(private val repo: UserRepository) : UserService {
     }
 
     override fun getById(id: Long): UserModel {
-        val u = this.repo.findById(id).get()
-        return UserModel(u)
+        return UserModel(this.repo.findById(id).get())
     }
 
     override fun delete(id: Long) {
         repo.delete(repo.findById(id).get())
+    }
+
+    override fun register(user: UserRegisterModel): String {
+        val u = UserEntity(user.name, passwordEncoder.encode(user.password))
+        repo.save(u)
+        return "token"
     }
 }
