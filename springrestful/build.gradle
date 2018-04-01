@@ -50,6 +50,7 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
     compile 'org.springframework.security.oauth:spring-security-oauth2:2.3.0.RELEASE'
+    compile 'org.springframework.security:spring-security-jwt:1.0.9.RELEASE'
     compile "org.flywaydb:flyway-core:5.0.7"
     runtime('org.postgresql:postgresql')
     runtime('org.springframework.boot:spring-boot-devtools')
