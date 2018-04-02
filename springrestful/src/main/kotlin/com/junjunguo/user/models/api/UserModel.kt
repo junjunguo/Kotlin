@@ -5,7 +5,7 @@ import java.util.*
 
 data class UserModel(
     var id: Long?,
-    var email: String,
+    var email: String?,
     var name: String,
     var modified: Date?,
     var created: Date?,

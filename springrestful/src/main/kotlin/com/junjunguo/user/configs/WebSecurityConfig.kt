@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -58,12 +59,15 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http
-            // default protection for all resources (including /oauth/authorize)
-            .authorizeRequests().antMatchers("/login").permitAll().and()
-            .authorizeRequests().antMatchers("/register").permitAll().and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            .httpBasic().realmName(securityRealm).and()
             .csrf().disable()
+            .httpBasic().realmName(securityRealm).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+
+            .authorizeRequests()
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //allow Options: headers ...
+//            .antMatchers("/login").permitAll()
+//            .antMatchers("/user/register").permitAll()
+            .anyRequest().authenticated()
     }
 
     @Bean

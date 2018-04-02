@@ -9,12 +9,12 @@ import java.util.*
 
 class UserDetailsImpl() : UserDetails {
 
-    private var email: String = ""
+    private var email: String? = null
     private var name: String = ""
     private var id: Long = -1
     private var password: String = ""
 
-    constructor(email: String = "", name: String = "", id: Long = -1, password: String = "") : this() {
+    constructor(email: String?, name: String, id: Long = -1, password: String) : this() {
         this.email = email
         this.name = name
         this.id = id

@@ -16,11 +16,11 @@ class UserServiceImpl(private val repo: UserRepository, private val passwordEnco
 
     override fun getAll() = repo.findAll().map { UserModel(it) }
 
-    override fun add(userModel: UserModel): UserModel {
-        val u = UserEntity(null, userModel.email, userModel.name, "1234567")
-        repo.save(u)
-        return UserModel(u)
-    }
+//    override fun add(userModel: UserModel): UserModel {
+//        val u = UserEntity(userModel.email, userModel.name, "1234567")
+//        repo.save(u)
+//        return UserModel(u)
+//    }
 
     override fun updateUser(id: Long, user: UserModel): UserModel {
         var u = this.repo.findById(id).get().apply {
@@ -39,9 +39,13 @@ class UserServiceImpl(private val repo: UserRepository, private val passwordEnco
         repo.delete(repo.findById(id).get())
     }
 
-    override fun register(user: UserRegisterModel): String {
+    override fun register(user: UserRegisterModel): UserModel {
+        if (repo.findByName(user.name).isPresent)
+            throw Exception("User name already taken!")
+        if (user.email != null && repo.findByEmail(user.email).isPresent)
+            throw Exception("Email already taken!")
         val u = UserEntity(user.name, passwordEncoder.encode(user.password))
-        repo.save(u)
-        return "token"
+        val ue = repo.save(u)
+        return UserModel(ue)
     }
 }

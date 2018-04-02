@@ -8,7 +8,7 @@ import javax.persistence.*
 data class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
+    var id: Long?,
 
     @ManyToOne()
     @JoinColumn(name = "user_id")

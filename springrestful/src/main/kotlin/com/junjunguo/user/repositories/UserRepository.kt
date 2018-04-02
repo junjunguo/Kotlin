@@ -14,4 +14,7 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
 
     @Query("SELECT u FROM UserEntity u where u.email = ?1")
     fun findByEmail(email: String): Optional<UserEntity>
+
+    @Query("SELECT u FROM UserEntity u where u.name = ?1")
+    fun findByName(name: String): Optional<UserEntity>
 }

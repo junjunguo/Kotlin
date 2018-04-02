@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices
+import org.springframework.security.oauth2.provider.token.TokenStore
 
 /**
  * <h1>Resource Server Configuration</h1>
@@ -36,13 +37,17 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 class ResourceServerConfig : ResourceServerConfigurerAdapter() {
 
     @Autowired
+    private lateinit var tokenStore: TokenStore
+
+    @Autowired
     private lateinit var tokenServices: ResourceServerTokenServices
 
     @Value("\${security.jwt.resource-ids}")
     private lateinit var resourceIds: String
 
     override fun configure(resources: ResourceServerSecurityConfigurer) {
-        resources.resourceId(resourceIds).tokenServices(tokenServices)
+        resources.tokenStore(tokenStore)
+//        resources.resourceId(resourceIds).tokenServices(tokenServices)
     }
 
     @Throws(Exception::class)
@@ -51,7 +56,7 @@ class ResourceServerConfig : ResourceServerConfigurerAdapter() {
             .requestMatchers()
             .and()
             .authorizeRequests()
-            .antMatchers("/actuator/**", "/api-docs/**").permitAll()
+            .antMatchers("/user/register", "/api-docs/**").permitAll()
             .antMatchers("/springjwt/**").authenticated()
     }
 

@@ -2,6 +2,7 @@ package com.junjunguo.user.configs
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer
@@ -13,6 +14,14 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain
 import org.springframework.security.oauth2.provider.token.TokenStore
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
 import java.util.*
+import javax.sql.DataSource
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer
+
 
 /**
  * <h1>Authorization Server Configuration</h1>
@@ -54,8 +63,30 @@ class AuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
     @Autowired
     private lateinit var accessTokenConverter: JwtAccessTokenConverter
 
+
     @Autowired
     private lateinit var authenticationManager: AuthenticationManager
+
+    @Autowired
+    private lateinit var dataSource: DataSource
+
+    @Autowired
+    private lateinit var passwordEncoder: PasswordEncoder
+
+    @Bean
+    fun tokenStore(): JdbcTokenStore {
+        return JdbcTokenStore(dataSource)
+    }
+
+    @Bean
+    protected fun authorizationCodeServices(): AuthorizationCodeServices {
+        return JdbcAuthorizationCodeServices(dataSource)
+    }
+
+    @Throws(Exception::class)
+    override fun configure(security: AuthorizationServerSecurityConfigurer) {
+        security.passwordEncoder(passwordEncoder)
+    }
 
     /**
      * ClientDetailsServiceConfigurer: a configurer that defines the client details service.
@@ -64,7 +95,9 @@ class AuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(configurer: ClientDetailsServiceConfigurer) {
         configurer
-            .inMemory()
+            .jdbc(dataSource)
+//            .inMemory()
+            .passwordEncoder(passwordEncoder)
             .withClient(clientId)
             .secret(clientSecret)
             .authorizedGrantTypes(grantType)
