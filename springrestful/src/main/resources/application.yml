@@ -59,11 +59,13 @@ logging:
   pattern:
     dateformat: yyyy.MM.dd HH:mm:ss.SSS
   level:
-    root: error
+    root: debug
     org:
       springframework:
         security:
           oauth2: debug
-        web: error
+        web: debug
       hibernate: debug
 
+app_config:
+  show_errors_for_debug: true

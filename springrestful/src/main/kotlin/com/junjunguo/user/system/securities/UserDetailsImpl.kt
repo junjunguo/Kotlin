@@ -1,4 +1,4 @@
-package com.junjunguo.user.securities
+package com.junjunguo.user.system.securities
 
 import com.junjunguo.user.models.entities.UserEntity
 import com.junjunguo.user.models.enums.RoleEnum

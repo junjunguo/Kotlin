@@ -1,4 +1,4 @@
-package com.junjunguo.user.configs
+package com.junjunguo.user.configs.securities
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value

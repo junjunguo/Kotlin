@@ -1,4 +1,4 @@
-package com.junjunguo.user.securities
+package com.junjunguo.user.system.securities
 
 import com.junjunguo.user.repositories.UserRepository
 import org.springframework.security.core.userdetails.UserDetails

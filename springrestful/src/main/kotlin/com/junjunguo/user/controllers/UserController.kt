@@ -23,9 +23,6 @@ class UserController(private val service: UserService) {
     @GetMapping("all")
     fun getAll() = this.service.getAll()
 
-//    @PostMapping("add")
-//    fun add(@RequestBody userModel: UserModel) = service.add(userModel)
-
     @DeleteMapping("id/{id}")
     fun delete(@PathVariable id: Long) = service.delete(id)
 
