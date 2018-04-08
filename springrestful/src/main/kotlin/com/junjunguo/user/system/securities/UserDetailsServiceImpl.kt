@@ -1,6 +1,7 @@
 package com.junjunguo.user.system.securities
 
 import com.junjunguo.user.repositories.UserRepository
+import org.springframework.context.annotation.Primary
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
+@Primary
 class UserDetailsServiceImpl(private val repo: UserRepository) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {

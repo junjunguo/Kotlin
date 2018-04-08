@@ -40,17 +40,17 @@ security:
     resource:
       filter-order: 3
 
-  signing-key: MaYzkSjmkzPC57L
+  signing-key: jwtSigningKey
   encoding-strength: 256
-  security-realm: Spring Boot JWT Example Realm
+  security-realm: securityRealm
 
   jwt:
-    client-id: testjwtclientid
-    client-secret: XY7kmzoNzl100
+    client-id: testClientId
+    client-secret: testClientSecret
     grant-type: password
     scope-read: read
     scope-write: write
-    resource-ids: testjwtresourceid
+    resource-ids: testResourceIds
 
 
 
@@ -59,7 +59,7 @@ logging:
   pattern:
     dateformat: yyyy.MM.dd HH:mm:ss.SSS
   level:
-    root: debug
+    root: info
     org:
       springframework:
         security:

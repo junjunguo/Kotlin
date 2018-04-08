@@ -3,7 +3,7 @@ package com.junjunguo.user
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.junjunguo.user.models.api.UserRegisterModel
-import com.junjunguo.user.system.errorHanlder.ApiError
+import com.junjunguo.user.system.errorHanlder.ApiErrorModel
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,7 +35,7 @@ class ControllerTests {
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
             .andReturn()
 
-        val apiError = ObjectMapper().findAndRegisterModules().readValue<ApiError>(result.response.contentAsString)
+        val apiError = ObjectMapper().findAndRegisterModules().readValue<ApiErrorModel>(result.response.contentAsString)
 
         assert(apiError.status == HttpStatus.BAD_REQUEST.value())
         assert((showErrors && apiError.errors?.size!! > 0) || (!showErrors && apiError.errors == null))

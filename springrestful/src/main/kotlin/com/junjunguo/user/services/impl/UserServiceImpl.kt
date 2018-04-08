@@ -21,6 +21,7 @@ class UserServiceImpl(private val repo: UserRepository, private val passwordEnco
 
     @Throws(Exception::class)
     override fun updateUser(id: Long, user: UserModel): UserModel {
+
         var u = this.repo.findById(id).get().apply {
             email = user.email
             name = user.name

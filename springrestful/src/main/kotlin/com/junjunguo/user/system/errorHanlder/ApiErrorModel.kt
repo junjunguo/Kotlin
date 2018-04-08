@@ -2,7 +2,7 @@ package com.junjunguo.user.system.errorHanlder
 
 import java.time.LocalDateTime
 
-data class ApiError(
+data class ApiErrorModel(
     var timestamp: LocalDateTime? = LocalDateTime.now(),
     var status: Int?,
     var error: String?,

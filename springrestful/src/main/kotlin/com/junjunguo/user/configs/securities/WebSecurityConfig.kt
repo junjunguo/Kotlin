@@ -1,73 +1,74 @@
 package com.junjunguo.user.configs.securities
 
+import com.junjunguo.user.system.securities.AppBasicAuthenticationEntryPoint
+import com.junjunguo.user.system.securities.UserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
-import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices
 import org.springframework.security.oauth2.provider.token.TokenStore
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore
+import javax.sql.DataSource
 
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Value("\${security.signing-key}")
     private lateinit var signingKey: String
 
-//    @Value("\${security.encoding-strength}")
-//    private lateinit var encodingStrength: Int
-
     @Value("\${security.security-realm}")
     private lateinit var securityRealm: String
 
-    @Autowired
-    private lateinit var userDetailsService: UserDetailsService
+//    @Value("\${security.encoding-strength}")
+//    private var encodingStrength: Int = 0
 
-    @Bean
-    @Throws(Exception::class)
-    override fun authenticationManager(): AuthenticationManager {
-        return super.authenticationManager()
-    }
+    @Autowired
+    private lateinit var dataSource: DataSource
+
+    @Autowired
+    private lateinit var userDetailsService: UserDetailsServiceImpl
+
+    @Autowired
+    private lateinit var appBasicAuthenticationEntryPoint: AppBasicAuthenticationEntryPoint
+
+    @Autowired
+    private lateinit var userDetailsAuthenticationProvider: UserDetailsAuthenticationProvider
+
 
     @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {
+//        auth.userDetailsService(userDetailsService).and()
+//            .authenticationProvider(userDetailsAuthenticationProvider)
         auth.userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder())
+            .and()
+            .authenticationProvider(authenticationProvider())
+            .jdbcAuthentication()
+            .dataSource(dataSource)
     }
 
-    /**
-     * the Authorization endpoint
-     *      /oauth/authorize (or its mapped alternative)
-     * should be protected using Spring Security so that it is only accessible to authenticated users.
-     * For instance using a standard Spring Security WebSecurityConfigurer
-     */
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .httpBasic()
+            .realmName(securityRealm)
+            .authenticationEntryPoint(appBasicAuthenticationEntryPoint).and()
             .csrf().disable()
-            .httpBasic().realmName(securityRealm).and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
-            .authorizeRequests()
-            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //allow Options: headers ...
-//            .antMatchers("/login").permitAll()
-//            .antMatchers("/user/register").permitAll()
-            .anyRequest().authenticated()
+            .headers().cacheControl()
     }
 
     @Bean
@@ -78,20 +79,24 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     }
 
     @Bean
+    @Throws(Exception::class)
+    override fun authenticationManager(): AuthenticationManager {
+        return super.authenticationManager()
+    }
+
+    @Bean
     fun tokenStore(): TokenStore {
         return JwtTokenStore(accessTokenConverter())
     }
 
     @Bean
-    @Primary //Making this primary to avoid any accidental duplication with another token service instance of the same name
-    fun tokenServices(): DefaultTokenServices {
-        val defaultTokenServices = DefaultTokenServices()
-        defaultTokenServices.setTokenStore(tokenStore())
-        defaultTokenServices.setSupportRefreshToken(true)
-        return defaultTokenServices
-    }
-
-    @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
 
+    @Bean
+    fun authenticationProvider(): DaoAuthenticationProvider {
+        val authenticationProvider = DaoAuthenticationProvider()
+        authenticationProvider.setUserDetailsService(userDetailsService)
+        authenticationProvider.setPasswordEncoder(passwordEncoder())
+        return authenticationProvider
+    }
 }
