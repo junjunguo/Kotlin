@@ -1,6 +1,7 @@
 package com.junjunguo.user.system.securities
 
 import com.junjunguo.user.repositories.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -10,15 +11,19 @@ import org.springframework.stereotype.Service
 
 @Service
 @Primary
-class UserDetailsServiceImpl(private val repo: UserRepository) : UserDetailsService {
+class UserDetailsServiceImpl : UserDetailsService {
+
+    @Autowired
+    private lateinit var userRepository: UserRepository
+
 
     override fun loadUserByUsername(username: String): UserDetails {
         try {
             return UserDetailsImpl(
                 if (username.toLongOrNull() == null)
-                    repo.findByEmail(username).get()
+                    userRepository.findByName(username).get()
                 else
-                    repo.findById(username.toLong()).get()
+                    userRepository.findById(username.toLong()).get()
             )
 
         } catch (e: Exception) {

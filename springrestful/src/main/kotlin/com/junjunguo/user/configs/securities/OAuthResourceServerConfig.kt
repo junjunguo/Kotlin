@@ -24,7 +24,7 @@ class OAuthResourceServerConfig : ResourceServerConfigurerAdapter() {
 
     override fun configure(resources: ResourceServerSecurityConfigurer) {
         resources
-            .resourceId(resourceIds)
+            .resourceId("client-id-B-resource-ids")
             .tokenStore(tokenStore)
     }
 

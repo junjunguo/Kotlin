@@ -1,11 +1,14 @@
 package com.junjunguo.user.configs.securities
 
 import com.junjunguo.user.system.securities.AppBasicAuthenticationEntryPoint
-import com.junjunguo.user.system.securities.UserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
+import org.springframework.core.env.Environment
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -13,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.oauth2.provider.token.TokenStore
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
@@ -38,7 +42,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     private lateinit var dataSource: DataSource
 
     @Autowired
-    private lateinit var userDetailsService: UserDetailsServiceImpl
+    private lateinit var userDetailsService: UserDetailsService
 
     @Autowired
     private lateinit var appBasicAuthenticationEntryPoint: AppBasicAuthenticationEntryPoint
@@ -46,6 +50,8 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
     private lateinit var userDetailsAuthenticationProvider: UserDetailsAuthenticationProvider
 
+    @Autowired
+    private lateinit var env: Environment
 
     @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {

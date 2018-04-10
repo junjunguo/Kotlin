@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
+
 class UserDetailsImpl() : UserDetails {
 
     private var email: String? = null
@@ -90,6 +91,6 @@ class UserDetailsImpl() : UserDetails {
      * @return `true` if the user is not locked, `false` otherwise
      */
     override fun isAccountNonLocked(): Boolean {
-        return false
+        return true
     }
 }

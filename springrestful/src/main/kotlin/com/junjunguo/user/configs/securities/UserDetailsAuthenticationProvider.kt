@@ -1,19 +1,18 @@
 package com.junjunguo.user.configs.securities
 
-import com.junjunguo.user.system.securities.UserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
-//AbstractUserDetailsAuthenticationProvider
 @Component
 class UserDetailsAuthenticationProvider : AbstractUserDetailsAuthenticationProvider() {
 
     @Autowired
-    private lateinit var userDetailsService: UserDetailsServiceImpl
+    private lateinit var userDetailsService: UserDetailsService
 
     @Autowired
     private lateinit var passwordEncoder: PasswordEncoder

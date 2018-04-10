@@ -2,7 +2,7 @@ package com.junjunguo.user.configs.securities
 
 import com.junjunguo.user.system.securities.UserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -19,25 +19,6 @@ import javax.sql.DataSource
 @Configuration
 @EnableAuthorizationServer
 class OAuthAuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
-
-
-    @Value("\${security.jwt.client-id}")
-    private lateinit var clientId: String
-
-    @Value("\${security.jwt.client-secret}")
-    private lateinit var clientSecret: String
-
-    @Value("\${security.jwt.grant-type}")
-    private lateinit var grantType: String
-
-    @Value("\${security.jwt.scope-read}")
-    private lateinit var scopeRead: String
-
-    @Value("\${security.jwt.scope-write}")
-    private val scopeWrite = "write"
-
-    @Value("\${security.jwt.resource-ids}")
-    private lateinit var resourceIds: String
 
     @Autowired
     private lateinit var tokenStore: TokenStore
@@ -56,22 +37,27 @@ class OAuthAuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
     private lateinit var passwordEncoder: PasswordEncoder
 
     @Autowired
+    @Qualifier("dataSource")
     private lateinit var dataSource: DataSource
 
 
     @Throws(Exception::class)
-    override fun configure(configurer: ClientDetailsServiceConfigurer) {
-        configurer
+    override fun configure(client: ClientDetailsServiceConfigurer) {
+        client
             .jdbc(dataSource)
+
             .passwordEncoder(passwordEncoder)
 
-//            .inMemory()  //
-//            .withClient(clientId)
-//            .secret(clientSecret)
-//            .authorizedGrantTypes(grantType)
-//            .authorities("USER")
-//            .scopes(scopeRead, scopeWrite)
-//            .resourceIds(resourceIds)
+//            .withClient("client-id-A")
+//            .authorizedGrantTypes("implicit")
+//            .scopes("read")
+//            .autoApprove(true)
+//            .and()
+//            .withClient("client-id-B")
+//            .secret("client-id-B-secret")
+//            .authorizedGrantTypes("password", "authorization_code", "refresh_token")
+//            .scopes("read","write")
+//            .resourceIds("client-id-B-resource-ids")
     }
 
     @Throws(Exception::class)
@@ -85,7 +71,10 @@ class OAuthAuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(oauthServer: AuthorizationServerSecurityConfigurer) {
-        oauthServer.allowFormAuthenticationForClients()
+        oauthServer
+            .allowFormAuthenticationForClients()
             .passwordEncoder(passwordEncoder)
+            .tokenKeyAccess("permitAll()")
+            .checkTokenAccess("isAuthenticated()")
     }
 }
