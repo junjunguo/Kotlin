@@ -72,7 +72,7 @@ class OAuthAuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(oauthServer: AuthorizationServerSecurityConfigurer) {
         oauthServer
-            .allowFormAuthenticationForClients()
+//            .allowFormAuthenticationForClients() // (send client credentials in body) vs in header
             .passwordEncoder(passwordEncoder)
             .tokenKeyAccess("permitAll()")
             .checkTokenAccess("isAuthenticated()")

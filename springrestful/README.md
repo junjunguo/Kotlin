@@ -21,6 +21,30 @@
 - apiModels
 - entities
 
+## Gradle
+
+- `gradle clean build` : for the build task to designate assembling all outputs and running all checks.
+
+
+add to build.gradle:
+```
+apply plugin: 'application'
+mainClassName = 'com.junjunguo.user.UserDemoApplicationKt'
+```
+
+> `gradle clean build`
+
+- built `tar` files in `build/distributions/`
+
+##### `jar` file generated in `build/libs/`
+
+> quick get `jar` file: `gradle bootJar`
+
+### Run application with gradle
+
+`./gradlew bootRun`
+
+
 ## [OAuth 2](https://oauth.net/2/)
 
 ### [The OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749)
@@ -74,7 +98,7 @@
 > An application making protected resource requests on behalf of the resource owner and with its authorization.  The term "client" does not imply any particular implementation characteristics (e.g., whether the application executes on a server, a desktop, or other devices).
 
 ##### 4. authorization server
-> The server issuing access tokens to the client after successfully authenticating the resource owner and obtaining authorization.
+> The server issuing access tokens to the client after successfully graauthenticating the resource owner and obtaining authorization.
 
    
 ## Database   

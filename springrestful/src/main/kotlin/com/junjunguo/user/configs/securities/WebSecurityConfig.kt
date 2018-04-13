@@ -55,8 +55,6 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {
-//        auth.userDetailsService(userDetailsService).and()
-//            .authenticationProvider(userDetailsAuthenticationProvider)
         auth.userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder())
             .and()
