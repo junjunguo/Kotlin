@@ -3,6 +3,7 @@ package com.junjunguo.user.configs.securities
 import com.junjunguo.user.system.securities.UserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -20,12 +21,38 @@ import javax.sql.DataSource
 @EnableAuthorizationServer
 class OAuthAuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
 
+    @Value("\${security.jwt.resource-ids}")
+    private lateinit var appResourceIds: String
+
+    @Value("\${security.jwt.web-client-id}")
+    private lateinit var appWebClientId: String
+
+    @Value("\${security.jwt.web-client-secret}")
+    private lateinit var appWebClientSecret: String
+
+    @Value("\${security.jwt.web-access-token-validity-seconds}")
+    private lateinit var appWebAccessTokenValiditySeconds: Integer
+
+    @Value("\${security.jwt.web-refresh-token-validity-seconds}")
+    private lateinit var appWebRefreshTokenValiditySeconds: Integer
+
+    @Value("\${security.jwt.native-client-id}")
+    private lateinit var appNativeClientId: String
+
+    @Value("\${security.jwt.native-client-secret}")
+    private lateinit var appNativeClientSecret: String
+
+    @Value("\${security.jwt.native-access-token-validity-seconds}")
+    private lateinit var appNativeAccessTokenValiditySeconds: Integer
+
+    @Value("\${security.jwt.native-refresh-token-validity-seconds}")
+    private lateinit var appNativeRefreshTokenValiditySeconds: Integer
+
     @Autowired
     private lateinit var tokenStore: TokenStore
 
     @Autowired
     private lateinit var accessTokenConverter: JwtAccessTokenConverter
-
 
     @Autowired
     private lateinit var authenticationManager: AuthenticationManager
@@ -45,19 +72,23 @@ class OAuthAuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
     override fun configure(client: ClientDetailsServiceConfigurer) {
         client
             .jdbc(dataSource)
-
             .passwordEncoder(passwordEncoder)
 
-//            .withClient("client-id-A")
-//            .authorizedGrantTypes("implicit")
-//            .scopes("read")
-//            .autoApprove(true)
-//            .and()
-//            .withClient("client-id-B")
-//            .secret("client-id-B-secret")
+//            .withClient(appWebClientId)
+//            .secret(appWebClientSecret)
+//            .resourceIds(appResourceIds)
+//            .scopes("read", "write")
 //            .authorizedGrantTypes("password", "authorization_code", "refresh_token")
-//            .scopes("read","write")
-//            .resourceIds("client-id-B-resource-ids")
+//            .accessTokenValiditySeconds(appWebAccessTokenValiditySeconds.toInt())
+//            .refreshTokenValiditySeconds(appWebRefreshTokenValiditySeconds.toInt())
+//            .and()
+//            .withClient(appNativeClientId)
+//            .secret(appNativeClientSecret)
+//            .resourceIds(appResourceIds)
+//            .scopes("read", "write")
+//            .authorizedGrantTypes("password", "authorization_code", "refresh_token")
+//            .accessTokenValiditySeconds(appNativeAccessTokenValiditySeconds.toInt())
+//            .refreshTokenValiditySeconds(appNativeRefreshTokenValiditySeconds.toInt())
     }
 
     @Throws(Exception::class)

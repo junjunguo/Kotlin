@@ -25,6 +25,7 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
 
     private val log = LogFactory.getLog(this.javaClass)
 
+
     override fun handleExceptionInternal(
         ex: Exception, @Nullable body: Any?,
         headers: HttpHeaders, status: HttpStatus, request: WebRequest

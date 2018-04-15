@@ -19,12 +19,12 @@ class OAuthResourceServerConfig : ResourceServerConfigurerAdapter() {
     private lateinit var tokenStore: TokenStore
 
     @Value("\${security.jwt.resource-ids}")
-    private lateinit var resourceIds: String
+    private lateinit var appResourceIds: String
 
 
     override fun configure(resources: ResourceServerSecurityConfigurer) {
         resources
-            .resourceId("client-id-B-resource-ids")
+            .resourceId(appResourceIds)
             .tokenStore(tokenStore)
     }
 

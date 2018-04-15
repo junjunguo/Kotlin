@@ -7,7 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 class UserDemoApplication
 
 fun main(args: Array<String>) {
-//    runApplication<UserDemoApplication>(*args)
     SpringApplication.run(UserDemoApplication::class.java, *args)
-
 }

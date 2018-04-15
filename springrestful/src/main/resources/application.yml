@@ -45,14 +45,15 @@ security:
   security-realm: securityRealm
 
   jwt:
-    client-id: testClientId
-    client-secret: testClientSecret
-    grant-type: password
-    scope-read: read
-    scope-write: write
+    web-client-id: testClientId
+    web-client-secret: testClientSecret
+    web-access-token-validity-seconds: 3600
+    web-refresh-token-validity-seconds: 86400
+    native-client-id: nativeClientId
+    native-client-secret: nativeClientSecret
+    native-access-token-validity-seconds: 86400 # 3600 * 24
+    native-refresh-token-validity-seconds: 2592000 # 3600 * 24 * 30
     resource-ids: testResourceIds
-
-
 
 logging:
   file: /Users/Junjun/Repository/logs/logs.log

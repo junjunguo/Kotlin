@@ -2,12 +2,10 @@ package com.junjunguo.user.configs.securities
 
 import com.junjunguo.user.system.securities.AppBasicAuthenticationEntryPoint
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.core.env.Environment
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -26,7 +24,6 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Value("\${security.signing-key}")
@@ -35,10 +32,8 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Value("\${security.security-realm}")
     private lateinit var securityRealm: String
 
-//    @Value("\${security.encoding-strength}")
-//    private var encodingStrength: Int = 0
-
     @Autowired
+    @Qualifier("dataSource")
     private lateinit var dataSource: DataSource
 
     @Autowired
@@ -46,9 +41,6 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Autowired
     private lateinit var appBasicAuthenticationEntryPoint: AppBasicAuthenticationEntryPoint
-
-    @Autowired
-    private lateinit var userDetailsAuthenticationProvider: UserDetailsAuthenticationProvider
 
     @Autowired
     private lateinit var env: Environment

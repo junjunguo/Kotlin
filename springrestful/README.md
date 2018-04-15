@@ -10,6 +10,33 @@
 - Spring Security JWT 1.0.9
 - Spring Security OAuth2 2.3.1
 - flywaydb 5.0.7
+
+**Client details** saved in DB
+```kotlin
+override fun configure(client: ClientDetailsServiceConfigurer) {
+        client
+            .jdbc(dataSource) // client details in DB.
+            .passwordEncoder(passwordEncoder)
+}
+```
+
+**Create table for Client details**
+
+```sql
+CREATE TABLE oauth_client_details (
+  client_id VARCHAR(256) PRIMARY KEY,
+  resource_ids VARCHAR(256),
+  client_secret VARCHAR(256),
+  scope VARCHAR(256),
+  authorized_grant_types VARCHAR(256),
+  web_server_redirect_uri VARCHAR(256),
+  authorities VARCHAR(256),
+  access_token_validity INTEGER,
+  refresh_token_validity INTEGER,
+  additional_information VARCHAR(4096),
+  autoapprove VARCHAR(256)
+);
+```
     
 ###layers:
 #### controller
@@ -20,6 +47,9 @@
 #### models
 - apiModels
 - entities
+
+#### test
+- OAuthAccessTokenTests
 
 ## Gradle
 
