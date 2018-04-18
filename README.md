@@ -1,5 +1,22 @@
 # Kotlin
-Learn Kotlin Programming Language
+Learn & build Kotlin + spring based backend
+
+
+Kotlin Repository:
+1. basic: Kotlin basic
+
+2. [springBoot](springBoot/): spring boot + gradle + RESTful api
+
+3. [springsql](springsql/): spring boot + gradle + PostgreSQL + RESTful api
+
+4. [springrestful](springrestful/): spring ([boot](https://github.com/spring-projects/spring-boot) + [security](https://github.com/spring-projects/spring-security)) + [gradle](https://gradle.org/) + [OAuth2](https://oauth.net/2/) + [JWT](https://jwt.io/) + [PostgreSQL](https://www.postgresql.org/) + [RESTful api](https://restfulapi.net/)
+
+5. [fullstack](fullstack/): in progress ...
+
+	5.1 [backend](fullstack/backend/): in progress ...
+
+	5.2 [frontend](fullstack/frontend/): in progress ...
+
 
 ## Kotlin Programming Language
 

@@ -1,0 +1,72 @@
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/backend_db
+    username: junjunguo
+    password: junjunguo
+    driver-class-name: org.postgresql.Driver
+    platform: postgresql
+  # JPA (JpaBaseConfiguration, HibernateJpaAutoConfiguration)
+  data:
+    jpa:
+      repositories:
+        enabled: true # Whether to enable JPA repositories.
+  jpa:
+    show-sql: true
+    generate-ddl: true # Whether to initialize the schema on startup.
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        order_updates: true
+        generate_statistics: true
+        temp:
+          use_jdbc_metadata_defaults: false
+  # FLYWAY (FlywayProperties)
+  flyway:
+    enabled: false
+    baseline-on-migrate: false
+
+# CORE PROPERTIES
+debug: false # Enable debug logs.
+trace: false # Enable trace logs.
+
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+
+  signing-key: jwtSigningKey
+  encoding-strength: 256
+  security-realm: securityRealm
+
+  jwt:
+    web-client-id: testClientId
+    web-client-secret: testClientSecret
+    web-access-token-validity-seconds: 3600
+    web-refresh-token-validity-seconds: 86400
+    native-client-id: nativeClientId
+    native-client-secret: nativeClientSecret
+    native-access-token-validity-seconds: 86400 # 3600 * 24
+    native-refresh-token-validity-seconds: 2592000 # 3600 * 24 * 30
+    resource-ids: testResourceIds
+
+logging:
+  file: /Users/Junjun/Repository/logs/logs.log
+  pattern:
+    dateformat: yyyy.MM.dd HH:mm:ss.SSS
+  level:
+    root: info
+    org:
+      springframework:
+        security:
+          oauth2: debug
+        web: debug
+      hibernate: debug
+
+app_config:
+  show_errors_for_debug: true
