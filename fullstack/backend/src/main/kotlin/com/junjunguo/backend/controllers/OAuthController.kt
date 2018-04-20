@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
+import java.util.*
 
 
 @Controller
@@ -19,5 +20,5 @@ class OAuthController(val userService: UserService) {
     }
 
     @PostMapping("register")
-    fun register(@RequestBody user: UserRegisterModel) = userService.register(user)
+    fun register(@RequestBody user: UserRegisterModel, locale: Locale) = userService.register(user, locale)
 }

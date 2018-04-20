@@ -7,57 +7,80 @@ import com.junjunguo.backend.repositories.UserRepository
 import com.junjunguo.backend.services.UserService
 import com.junjunguo.backend.settings.errorHanlder.exceptions.BadRequestException
 import com.junjunguo.backend.settings.errorHanlder.exceptions.InternalServerException
+import org.springframework.context.MessageSource
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 
 @Service
 @Transactional
-class UserServiceImpl(private val repo: UserRepository, private val passwordEncoder: PasswordEncoder) : UserService {
+class UserServiceImpl(
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val messageSource: MessageSource
+) : UserService {
     override fun getByName(username: String?): UserModel {
         if (username.isNullOrBlank()) throw InternalServerException("username null")
 
-        return UserModel(repo.findByName(username!!).get())
+        return UserModel(userRepository.findByName(username!!).get())
     }
 
     @Throws(Exception::class)
-    override fun getAll() = repo.findAll().map { UserModel(it) }
+    override fun getAll() = userRepository.findAll().map { UserModel(it) }
 
     @Throws(Exception::class)
     override fun updateUser(id: Long, user: UserModel): UserModel {
 
-        var u = this.repo.findById(id).get().apply {
+        var u = this.userRepository.findById(id).get().apply {
             email = user.email
             name = user.name
         }
-        repo.save(u)
+        userRepository.save(u)
         return UserModel(u)
     }
 
     @Throws(Exception::class)
     override fun getById(id: Long): UserModel {
-        return UserModel(this.repo.findById(id).get())
+        return UserModel(this.userRepository.findById(id).get())
     }
 
     @Throws(Exception::class)
     override fun delete(id: Long) {
-        repo.delete(repo.findById(id).get())
+        userRepository.delete(userRepository.findById(id).get())
     }
 
     @Throws(Exception::class)
-    override fun register(user: UserRegisterModel): UserModel {
+    override fun register(user: UserRegisterModel, locale: Locale): UserModel {
         if (user.name.isBlank() || user.password.isBlank())
-            throw BadRequestException("User name & password must be set!")
-        if (repo.findByName(user.name).isPresent)
-            throw BadRequestException("User name already taken!")
-        if (user.email != null && repo.findByEmail(user.email).isPresent)
-            throw BadRequestException("Email already taken!")
+            throw BadRequestException(
+                messageSource.getMessage(
+                    "bad_request.User_name_and_password_must_be_set",
+                    null,
+                    locale
+                )
+            )
+        if (userRepository.findByName(user.name).isPresent)
+            throw BadRequestException(
+                messageSource.getMessage(
+                    "bad_request.User_name_already_taken",
+                    null,
+                    locale
+                )
+            )
+        if (!user.email.isNullOrBlank() && userRepository.findByEmail(user.email!!).isPresent)
+            throw BadRequestException(
+                messageSource.getMessage(
+                    "bad_request.Email_already_taken",
+                    null,
+                    locale
+                )
+            )
 
         try {
-
             val u = UserEntity(user.name, passwordEncoder.encode(user.password))
-            val ue = repo.save(u)
+            val ue = userRepository.save(u)
             return UserModel(ue)
         } catch (e: Exception) {
             throw InternalServerException(e.message!!, e)
@@ -65,6 +88,6 @@ class UserServiceImpl(private val repo: UserRepository, private val passwordEnco
     }
 
     override fun logout(username: String?) {
-        repo.save(repo.findByName(username!!).get().apply { isCredentialsNonExpired = false })
+        userRepository.save(userRepository.findByName(username!!).get().apply { isCredentialsNonExpired = false })
     }
 }

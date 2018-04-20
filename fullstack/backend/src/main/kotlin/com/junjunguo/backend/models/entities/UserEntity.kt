@@ -54,10 +54,12 @@ data class UserEntity(
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @Column(columnDefinition = "timestamp with time zone not null")
     var modified: Date = Date(System.currentTimeMillis()),
 
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
+    @Column(columnDefinition = "timestamp with time zone not null")
     var created: Date = Date(System.currentTimeMillis()),
 
     @GeneratedValue(generator = "uuid2")

@@ -26,10 +26,19 @@ spring:
         generate_statistics: true
         temp:
           use_jdbc_metadata_defaults: false
+        jdbc:
+          time_zone: UTC
+
+  jackson:
+    default-property-inclusion: non_null
+
   # FLYWAY (FlywayProperties)
   flyway:
     enabled: false
     baseline-on-migrate: false
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
 
 # CORE PROPERTIES
 debug: false # Enable debug logs.
@@ -70,3 +79,4 @@ logging:
 
 app_config:
   show_errors_for_debug: true
+
