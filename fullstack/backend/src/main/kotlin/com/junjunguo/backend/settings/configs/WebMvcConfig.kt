@@ -1,7 +1,5 @@
 package com.junjunguo.backend.settings.configs
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.LocaleResolver
@@ -21,21 +19,15 @@ class WebMvcConfig : WebMvcConfigurer {
         Locale.CHINESE
     )
 
-    @Autowired
-    private lateinit var properties: WebMvcProperties
-
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(localeChangeInterceptor())
     }
 
     @Bean
     fun localeResolver(): LocaleResolver {
-//        val slr = SessionLocaleResolver()
-//        slr.setDefaultLocale(Locale.ENGLISH)
-//        return slr
         val resolver = AcceptHeaderLocaleResolver()
         resolver.supportedLocales = locales
-        resolver.defaultLocale = properties.locale
+        resolver.defaultLocale = Locale.ENGLISH
         return resolver
     }
 

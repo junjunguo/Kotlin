@@ -21,7 +21,32 @@ class ErrorHandlerUtil {
             )
         }
 
-        fun getApiError(ex: Exception, request: HttpServletRequest, status: HttpStatus, showErrors: Boolean): ApiErrorModel {
+        fun getApiError(
+            ex: Exception,
+            request: WebRequest,
+            status: HttpStatus,
+            showErrors: Boolean,
+            msg: String
+        ): ApiErrorModel {
+            return ApiErrorModel(
+                status.value(),
+                status.reasonPhrase,
+                msg,
+                if (showErrors) listOf(
+                    "request Description: " + request.getDescription(true),
+                    "localizedMessage: " + ex.localizedMessage,
+                    "exception: " + ex.toString(),
+                    "cause: " + ex.cause
+                ) else null
+            )
+        }
+
+        fun getApiError(
+            ex: Exception,
+            request: HttpServletRequest,
+            status: HttpStatus,
+            showErrors: Boolean
+        ): ApiErrorModel {
             return ApiErrorModel(
                 status.value(),
                 status.reasonPhrase,

@@ -1,5 +1,6 @@
 package com.junjunguo.backend.models.entities
 
+import org.hibernate.annotations.Subselect
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -7,7 +8,8 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "oauth_client_details")
-data class OauthClientDetails(
+@Subselect("select * from oauth_client_details") // ignore
+data class OauthClientDetailsEntity(
 
     @Id
     @Column(name = "client_id", length = 256)
@@ -43,6 +45,7 @@ data class OauthClientDetails(
 
     @Column(name = "autoapprove", nullable = true, length = 256)
     var autoapprove: String?
-) {
-    constructor() : this(null, null, null, null, null, null, null, null, null, null, null)
-}
+)
+//{
+//    constructor() : this(null, null, null, null, null, null, null, null, null, null, null)
+//}

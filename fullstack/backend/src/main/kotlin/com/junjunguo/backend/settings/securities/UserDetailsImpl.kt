@@ -1,6 +1,6 @@
 package com.junjunguo.backend.settings.securities
 
-import com.junjunguo.backend.models.entities.UserEntity
+import com.junjunguo.backend.models.entities.UserBaseEntity
 import com.junjunguo.backend.models.enums.RoleEnum
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -17,8 +17,8 @@ class UserDetailsImpl() : UserDetails {
     private var isAccountNonExpired: Boolean = true
     private var isAccountNonLocked: Boolean = true
 
-    constructor(ue: UserEntity) : this() {
-        name = ue.name
+    constructor(ue: UserBaseEntity) : this() {
+        name = ue.id.toString() // use id as name, I don't want to search the user every time.
         password = ue.password
         isEnabled = ue.isEnabled
         isCredentialsNonExpired = ue.isCredentialsNonExpired

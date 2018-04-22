@@ -2,7 +2,6 @@ package com.junjunguo.backend.services
 
 import com.junjunguo.backend.models.api.UserModel
 import com.junjunguo.backend.models.api.UserRegisterModel
-import java.util.*
 
 interface UserService {
     @Throws(Exception::class)
@@ -18,7 +17,7 @@ interface UserService {
     fun delete(id: Long)
 
     @Throws(Exception::class)
-    fun register(user: UserRegisterModel, locale: Locale): UserModel
+    fun register(user: UserRegisterModel): UserModel
 
 
     @Throws(Exception::class)

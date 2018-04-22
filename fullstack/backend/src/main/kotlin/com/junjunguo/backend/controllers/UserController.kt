@@ -10,15 +10,13 @@ import java.security.Principal
 class UserController(private val service: UserService) {
 
     @GetMapping("id/{id}")
-//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    fun getUser(@PathVariable id: Long) = service.getById(id)
+    fun getUser(@PathVariable id: Long, principal: Principal) = service.getById(id)
 
-    @GetMapping()
-    fun getRequesterInfo(principal : Principal) = service.getByName(principal.name)
+    @GetMapping("info")
+    fun getRequesterInfo(principal : Principal) = service.getById(principal.name.toLong())
 
     @PutMapping("update")
     fun updateUser(@RequestBody user: UserModel, principal : Principal): UserModel? {
-        println("- - - - -- - - - - - -  - - - - --  - "+principal.toString())
         val id = user.id ?: -1
         if (id > -1)
             return service.updateUser(id, user)
@@ -30,4 +28,5 @@ class UserController(private val service: UserService) {
 
     @DeleteMapping("id/{id}")
     fun delete(@PathVariable id: Long) = service.delete(id)
+
 }

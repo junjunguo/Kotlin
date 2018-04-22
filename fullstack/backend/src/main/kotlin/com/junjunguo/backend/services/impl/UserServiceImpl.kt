@@ -2,16 +2,14 @@ package com.junjunguo.backend.services.impl
 
 import com.junjunguo.backend.models.api.UserModel
 import com.junjunguo.backend.models.api.UserRegisterModel
-import com.junjunguo.backend.models.entities.UserEntity
+import com.junjunguo.backend.models.entities.UserBaseEntity
 import com.junjunguo.backend.repositories.UserRepository
 import com.junjunguo.backend.services.UserService
 import com.junjunguo.backend.settings.errorHanlder.exceptions.BadRequestException
 import com.junjunguo.backend.settings.errorHanlder.exceptions.InternalServerException
-import org.springframework.context.MessageSource
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 
 @Service
@@ -19,8 +17,10 @@ import java.util.*
 class UserServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val messageSource: MessageSource
+    private val translateService: TranslateService
+
 ) : UserService {
+
     override fun getByName(username: String?): UserModel {
         if (username.isNullOrBlank()) throw InternalServerException("username null")
 
@@ -33,7 +33,7 @@ class UserServiceImpl(
     @Throws(Exception::class)
     override fun updateUser(id: Long, user: UserModel): UserModel {
 
-        var u = this.userRepository.findById(id).get().apply {
+        val u = this.userRepository.findById(id).get().apply {
             email = user.email
             name = user.name
         }
@@ -52,34 +52,28 @@ class UserServiceImpl(
     }
 
     @Throws(Exception::class)
-    override fun register(user: UserRegisterModel, locale: Locale): UserModel {
+    override fun register(user: UserRegisterModel): UserModel {
         if (user.name.isBlank() || user.password.isBlank())
             throw BadRequestException(
-                messageSource.getMessage(
-                    "bad_request.User_name_and_password_must_be_set",
-                    null,
-                    locale
+                translateService.translate(
+                    "bad_request.User_name_and_password_must_be_set"
                 )
             )
         if (userRepository.findByName(user.name).isPresent)
             throw BadRequestException(
-                messageSource.getMessage(
-                    "bad_request.User_name_already_taken",
-                    null,
-                    locale
+                translateService.translate(
+                    "bad_request.User_name_already_taken"
                 )
             )
         if (!user.email.isNullOrBlank() && userRepository.findByEmail(user.email!!).isPresent)
             throw BadRequestException(
-                messageSource.getMessage(
-                    "bad_request.Email_already_taken",
-                    null,
-                    locale
+                translateService.translate(
+                    "bad_request.Email_already_taken"
                 )
             )
 
         try {
-            val u = UserEntity(user.name, passwordEncoder.encode(user.password))
+            val u = UserBaseEntity(user.email, user.name, passwordEncoder.encode(user.password))
             val ue = userRepository.save(u)
             return UserModel(ue)
         } catch (e: Exception) {

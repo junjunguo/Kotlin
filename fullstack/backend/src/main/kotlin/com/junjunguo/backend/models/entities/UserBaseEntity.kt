@@ -9,7 +9,7 @@ import javax.validation.constraints.Email
 
 @Entity
 @Table(name = "users")
-data class UserEntity(
+data class UserBaseEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long?,
@@ -54,20 +54,20 @@ data class UserEntity(
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    @Column(columnDefinition = "timestamp with time zone not null")
-    var modified: Date = Date(System.currentTimeMillis()),
+    @Column(name = "modified_date")
+    var modifiedDate: Date = Date(System.currentTimeMillis()),
 
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
-    @Column(columnDefinition = "timestamp with time zone not null")
-    var created: Date = Date(System.currentTimeMillis()),
+    @Column(name = "created_date")
+    var createdDate: Date = Date(System.currentTimeMillis()),
 
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     var uuid: UUID = UUID.randomUUID()
 ) {
 
-    constructor() : this("", "")
+//    constructor() : this("", "")
 
     constructor(name: String, password: String) : this(
         null,

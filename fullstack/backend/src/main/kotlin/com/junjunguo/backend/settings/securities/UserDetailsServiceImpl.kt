@@ -1,5 +1,6 @@
 package com.junjunguo.backend.settings.securities
 
+import com.junjunguo.backend.models.entities.UserBaseEntity
 import com.junjunguo.backend.repositories.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -19,15 +20,19 @@ class UserDetailsServiceImpl : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {
         try {
-            return UserDetailsImpl(
-                if (username.toLongOrNull() == null)
-                    userRepository.findByName(username).get()
-                else
-                    userRepository.findById(username.toLong()).get()
-            )
-
+            return UserDetailsImpl(findUserByName(username))
         } catch (e: Exception) {
             throw UsernameNotFoundException(username)
         }
+    }
+
+    fun findUserByName(name: String): UserBaseEntity {
+        val id = name.toLongOrNull()
+        if (id != null) {
+            var user = userRepository.findById(id)
+            if (user.isPresent) return user.get()
+        }
+
+        return userRepository.findByName(name).get()
     }
 }
