@@ -13,12 +13,12 @@ import java.util.*
 @Repository
 interface FriendRepository : JpaRepository<UserFriendsEntity, Long> {
 
-    @Query("SELECT f FROM UserFriendsEntity f WHERE f.user_first_id = :userId OR f.user_second_id = :userId")
+    @Query("SELECT f FROM UserFriendsEntity f WHERE f.firstUser.id = :userId OR f.secondUser.id = :userId")
     fun findFriends(@Param("userId") userId: Long): Optional<List<UserFriendsEntity>>
 
     /**
      * smallId must < biggerId
      */
-//    @Query("SELECT f from UserFriendsEntity f WHERE f.user_first_id= :smallId AND f.user_second_id = :biggerId")
-//    fun findFriend(@Param("smallId") smallId: Long, @Param("biggerId") biggerId: Long): Optional<UserFriendsEntity>
+    @Query("SELECT f from UserFriendsEntity f WHERE f.firstUser.id= :smallId AND f.secondUser.id = :biggerId")
+    fun findFriend(@Param("smallId") smallId: Long, @Param("biggerId") biggerId: Long): Optional<UserFriendsEntity>
 }

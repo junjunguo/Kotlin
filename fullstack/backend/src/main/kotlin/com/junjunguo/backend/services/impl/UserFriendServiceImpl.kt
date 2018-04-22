@@ -32,36 +32,34 @@ class UserFriendServiceImpl(
     }
 
     override fun removeFriend(userId: Long, friendId: Long) {
-//        val f = friendRepository.findFriend(
-//            if (userId < friendId) userId else friendId,
-//            if (userId > friendId) userId else friendId
-//        )
-//
-//        if (!f.isPresent) throw BadRequestException(translateService.translate("ex.user_not_found"))
-//
-//        friendRepository.delete(f.get())
+        val f = friendRepository.findFriend(
+            if (userId < friendId) userId else friendId,
+            if (userId > friendId) userId else friendId
+        )
+
+        if (!f.isPresent) throw BadRequestException(translateService.translate("ex.user_not_found"))
+
+        friendRepository.delete(f.get())
     }
 
     override fun confirmFriendRequest(userId: Long, requesterId: Long): UserModel {
-        return UserModel(null, null, "", null, null, null)
-//        val f = friendRepository.findFriend(
-//            if (userId < requesterId) userId else requesterId,
-//            if (userId > requesterId) userId else requesterId
-//        )
-//
-//        if (!f.isPresent) throw BadRequestException(translateService.translate("ex.user_not_found"))
-//
-//        val fe = f.get()
-//
-//        if (fe.firstUser.id == userId && fe.status == FriendStatus.PENDING_SECOND_FIRST ||
-//            fe.secondUser.id == userId && fe.status == FriendStatus.PENDING_FIRST_SECOND
-//        ) {
-//            f.get().apply { status = FriendStatus.FRIEND }
-//            return UserModel(if (fe.firstUser.id == requesterId) fe.firstUser else fe.secondUser)
-//        } else throw BadRequestException(translateService.translate("ex.permission_denied"))
+        val f = friendRepository.findFriend(
+            if (userId < requesterId) userId else requesterId,
+            if (userId > requesterId) userId else requesterId
+        )
+
+        if (!f.isPresent) throw BadRequestException(translateService.translate("ex.user_not_found"))
+
+        val fe = f.get()
+
+        if (fe.firstUser.id == userId && fe.status == FriendStatus.PENDING_SECOND_FIRST ||
+            fe.secondUser.id == userId && fe.status == FriendStatus.PENDING_FIRST_SECOND
+        ) {
+            f.get().apply { status = FriendStatus.FRIEND }
+            return UserModel(if (fe.firstUser.id == requesterId) fe.firstUser else fe.secondUser)
+        } else throw BadRequestException(translateService.translate("ex.permission_denied"))
     }
 
-    override fun getAllFriends(userId: Long) = null
-//        friendRepository.findFriends(userId).get().map { it -> FriendUtil.getFriendModel(it, userId) }
-
+    override fun getAllFriends(userId: Long) =
+        friendRepository.findFriends(userId).get().map { it -> FriendUtil.getFriendModel(it, userId) }
 }
