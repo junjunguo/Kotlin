@@ -31,7 +31,7 @@ data class UserFriendsEntity(
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date")
-    var createdDate: Date? = Date(System.currentTimeMillis()),
+    var createdDate: Date = Date(System.currentTimeMillis()),
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "confirmed_date", nullable = true)
@@ -42,7 +42,7 @@ data class UserFriendsEntity(
         firstUser,
         secondUser,
         status,
-        null,
+        Date(System.currentTimeMillis()),
         null
     )
 }

@@ -9,6 +9,7 @@ import com.junjunguo.backend.services.UserFriendService
 import com.junjunguo.backend.settings.errorHanlder.exceptions.BadRequestException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 @Transactional
@@ -19,6 +20,7 @@ class UserFriendServiceImpl(
 ) :
     UserFriendService {
     override fun addFriend(userId: Long, friendId: Long) {
+        if (userId == friendId) throw BadRequestException(translateService.translate("ex.not_valid_request"))
         val u = userRepository.findById(userId)
         if (!u.isPresent) throw BadRequestException(translateService.translate("ex.user_not_found"))
 
@@ -55,7 +57,7 @@ class UserFriendServiceImpl(
         if (fe.firstUser.id == userId && fe.status == FriendStatus.PENDING_SECOND_FIRST ||
             fe.secondUser.id == userId && fe.status == FriendStatus.PENDING_FIRST_SECOND
         ) {
-            f.get().apply { status = FriendStatus.FRIEND }
+            fe.apply { status = FriendStatus.FRIEND; confirmedDate = Date(System.currentTimeMillis()) }
             return UserModel(if (fe.firstUser.id == requesterId) fe.firstUser else fe.secondUser)
         } else throw BadRequestException(translateService.translate("ex.permission_denied"))
     }
