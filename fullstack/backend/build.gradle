@@ -55,7 +55,9 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-reflect")
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.1.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
-	runtime('org.springframework.boot:spring-boot-devtools')
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.13'
+    runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')

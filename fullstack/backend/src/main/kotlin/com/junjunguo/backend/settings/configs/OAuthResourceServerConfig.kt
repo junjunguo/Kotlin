@@ -3,7 +3,6 @@ package com.junjunguo.backend.settings.configs
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer
@@ -35,7 +34,7 @@ class OAuthResourceServerConfig : ResourceServerConfigurerAdapter() {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
             .authorizeRequests()
-            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //allow Options: headers ...
+//            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //allow Options: headers ...
             .antMatchers("/auth/register").permitAll()
             .anyRequest().authenticated()
     }
