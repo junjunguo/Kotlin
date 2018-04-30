@@ -1,0 +1,40 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>register</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form (ngSubmit)="register()" #registerForm="ngForm">
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+
+          <ion-item>
+            <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="model.email" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="text" placeholder="Name" name="name" [(ngModel)]="model.name" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="model.password" required></ion-input>
+          </ion-item>
+
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="signup-col">
+        <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Register</button>
+        <button ion-button class="login-btn" block clear (click)="login()">Go to login</button>
+      </ion-col>
+    </ion-row>
+
+  </form>
+</ion-content>
