@@ -1,18 +1,26 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 import { AuthenticationService } from '../../core/services/authentication.service';
 
 @IonicPage()
 @Component({
   selector: 'page-register',
   templateUrl: 'register.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterPage {
 
+  loading: Loading;
   model = { name: "", password: "", email: "" }
   createSuccess = false;
 
-  constructor(public nav: NavController, public navParams: NavParams, private auth: AuthenticationService, private alertCtrl: AlertController) {
+  constructor(
+    public nav: NavController,
+    public navParams: NavParams,
+    public loadingCtrl: LoadingController,
+    private auth: AuthenticationService,
+    private alertCtrl: AlertController,
+    private cdr: ChangeDetectorRef) {
   }
 
   ionViewDidLoad() {
@@ -21,21 +29,31 @@ export class RegisterPage {
 
   register() {
     if (!this.model || !this.model.name || !this.model.password) { return; }
-    this.auth.register(this.model).subscribe(success => {
-      if (success) {
+    this.showLoading();
+    this.auth.register(this.model)
+      .finally(() => {
+        this.cdr.markForCheck();
+        this.loading.dismiss()
+      })
+      .subscribe(res => {
         this.createSuccess = true;
         this.showPopup("Success", "Account created.");
-      } else {
-        this.showPopup("Error", "Problem creating account.");
-      }
-    },
-      error => {
-        this.showPopup("Error", error.message);
-      });
+      },
+        error => {
+          this.showPopup("Error", error.message);
+        });
   }
 
   login() {
     this.nav.push('LoginPage');
+  }
+
+  showLoading(): void {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...',
+      dismissOnPageChange: true
+    });
+    this.loading.present();
   }
 
   showPopup(title, text) {

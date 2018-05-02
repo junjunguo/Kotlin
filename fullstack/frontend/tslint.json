@@ -1,4 +1,3 @@
-// let path = require("path");
 {
     "extends": [
         "tslint-eslint-rules"
@@ -6,8 +5,6 @@
     "rulesDirectory": [
         "node_modules/codelyzer"
     ],
-    // {
-    //   "rulesDirectory": path.join(path.dirname(require.resolve("tslint-eslint-rules")), "dist/rules"),
     "rules": {
         "align": true,
         "await-promise": true,

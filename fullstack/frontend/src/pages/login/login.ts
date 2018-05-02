@@ -1,14 +1,17 @@
 import { AuthenticationService } from './../../core/services/authentication.service';
-import { Component } from '@angular/core';
-import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams, MenuController } from 'ionic-angular';
 import { UserLoginModel } from '../../core/models/user-login.model';
+import { HomePage } from '../home/home';
 
 @IonicPage()
 @Component({
   selector: 'page-login',
-  templateUrl: 'login.html'
+  templateUrl: 'login.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginPage {
+
   loading: Loading;
   model: UserLoginModel = { username: '', password: '' };
 
@@ -17,7 +20,16 @@ export class LoginPage {
     public navParams: NavParams,
     public auth: AuthenticationService,
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public menCtr: MenuController,
+    private cdr: ChangeDetectorRef) {
+    this.auth.isLoggedin()
+      .subscribe(isLoggedIn => {
+        if (isLoggedIn) {
+          this.nav.setRoot(HomePage);
+          this.menCtr.enable(true);
+        }
+      })
   }
 
   ionViewDidLoad(): void {
@@ -31,16 +43,15 @@ export class LoginPage {
   login(): void {
     this.showLoading();
     this.auth.login(this.model)
+      .finally(() => {
+        this.cdr.markForCheck();
+        this.loading.dismiss
+      })
       .subscribe(value => {
-        console.log(' - - - sub ', value);
-        // if (value) {
-        //   this.nav.setRoot('HomePage');
-        // } else {
-        //   this.showError("Access Denied");
-        // }
+        this.nav.setRoot(HomePage);
+        this.menCtr.enable(true);
       },
         error => {
-          console.log(error);
           this.showError(error.message);
         });
   }
