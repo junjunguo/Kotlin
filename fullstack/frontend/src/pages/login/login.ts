@@ -3,6 +3,7 @@ import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/
 import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams, MenuController } from 'ionic-angular';
 import { UserLoginModel } from '../../core/models/user-login.model';
 import { HomePage } from '../home/home';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @IonicPage()
 @Component({
@@ -14,6 +15,7 @@ export class LoginPage {
 
   loading: Loading;
   model: UserLoginModel = { username: '', password: '' };
+   subscription : Subscription;
 
   constructor(
     public nav: NavController,
@@ -23,7 +25,10 @@ export class LoginPage {
     public alertCtrl: AlertController,
     public menCtr: MenuController,
     private cdr: ChangeDetectorRef) {
-    this.auth.isLoggedin()
+  }
+
+  ionViewWillEnter() {
+    this.subscription = this.auth.isLoggedIn
       .subscribe(isLoggedIn => {
         if (isLoggedIn) {
           this.nav.setRoot(HomePage);
@@ -32,8 +37,8 @@ export class LoginPage {
       })
   }
 
-  ionViewDidLoad(): void {
-    console.log('ionViewDidLoad LoginPage');
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
   }
 
   createAccount(): void {

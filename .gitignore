@@ -101,3 +101,23 @@ scripts/build/e2e-generated-tsconfig.json
 
 stencil-stats.json
 
+plugins/
+.sourcemaps/
+
+*.mode1v3
+*.perspectivev3
+*.pbxuser
+platforms/ios/build
+
+platforms/android/build.xml
+platforms/android/local.properties
+platforms/android/gradlew
+platforms/android/gradlew.bat
+platforms/android/gradle
+
+platforms/android/build
+
+platforms/android/gen
+platforms/android/out
+
+

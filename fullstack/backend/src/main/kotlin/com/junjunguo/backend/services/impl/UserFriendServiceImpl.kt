@@ -1,6 +1,6 @@
 package com.junjunguo.backend.services.impl
 
-import com.junjunguo.backend.models.api.UserModel
+import com.junjunguo.backend.models.api.FriendModel
 import com.junjunguo.backend.models.entities.UserFriendsEntity
 import com.junjunguo.backend.models.enums.FriendStatus
 import com.junjunguo.backend.repositories.FriendRepository
@@ -19,7 +19,7 @@ class UserFriendServiceImpl(
     private val friendRepository: FriendRepository
 ) :
     UserFriendService {
-    override fun addFriend(userId: Long, friendId: Long) {
+    override fun addFriend(userId: Long, friendId: Long): FriendModel {
         if (userId == friendId) throw BadRequestException(translateService.translate("ex.not_valid_request"))
         val u = userRepository.findById(userId)
         if (!u.isPresent) throw BadRequestException(translateService.translate("ex.user_not_found"))
@@ -31,6 +31,7 @@ class UserFriendServiceImpl(
         else UserFriendsEntity(f.get(), u.get(), FriendStatus.PENDING_SECOND_FIRST)
 
         friendRepository.save(fe)
+        return FriendUtil.getFriendModel(fe, userId)
     }
 
     override fun removeFriend(userId: Long, friendId: Long) {
@@ -44,7 +45,7 @@ class UserFriendServiceImpl(
         friendRepository.delete(f.get())
     }
 
-    override fun confirmFriendRequest(userId: Long, requesterId: Long): UserModel {
+    override fun confirmFriendRequest(userId: Long, requesterId: Long): FriendModel {
         val f = friendRepository.findFriend(
             if (userId < requesterId) userId else requesterId,
             if (userId > requesterId) userId else requesterId
@@ -58,7 +59,7 @@ class UserFriendServiceImpl(
             fe.secondUser.id == userId && fe.status == FriendStatus.PENDING_FIRST_SECOND
         ) {
             fe.apply { status = FriendStatus.FRIEND; confirmedDate = Date(System.currentTimeMillis()) }
-            return UserModel(if (fe.firstUser.id == requesterId) fe.firstUser else fe.secondUser)
+            return FriendUtil.getFriendModel(fe, userId)
         } else throw BadRequestException(translateService.translate("ex.permission_denied"))
     }
 

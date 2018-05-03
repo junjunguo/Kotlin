@@ -11,6 +11,7 @@ import { Injectable } from '@angular/core';
 
 import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -19,13 +20,17 @@ export class AuthInterceptor implements HttpInterceptor {
 
     constructor(
         private nav: NavController,
+        private auth: AuthenticationService
     ) { }
 
     public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const currentUser = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_NAME));
         let authReq = req;
-        if (currentUser) {
-            authReq = req.clone({ headers: req.headers.set('Authorization', currentUser.token) });
+
+        if (this.auth && this.auth.getAuthModel() && this.auth.getAuthModel() && this.auth.getAuthModel().access_token) {
+            authReq = req.clone({
+                headers: req.headers.set('Authorization',
+                    `Bearer ${this.auth.getAuthModel().access_token}`)
+            });
         }
 
         return next.handle(authReq).do(() => {

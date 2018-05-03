@@ -4,11 +4,13 @@ import { Injectable } from "@angular/core";
 
 import { Storage } from '@ionic/storage';
 import { UserModel } from '../models/user.model';
+import { FriendModel } from '../models/friend.model';
 
 @Injectable()
 export class LocalStorageRepository {
 
     private readonly app_user_json = "app_user_json";
+    private readonly app_user_friends_json = "app_user_friends_json";
     private readonly app_access_token_json = "app_access_token_json";
 
     constructor(private storage: Storage) { }
@@ -19,6 +21,13 @@ export class LocalStorageRepository {
 
     saveUser(user: UserModel) {
         return this.storage.set(this.app_user_json, JSON.stringify(user));
+    }
+    saveFriends(friends: FriendModel[]) {
+        return this.storage.set(this.app_user_friends_json, JSON.stringify(friends));
+    }
+
+    getFriends() {
+        return this.storage.get(this.app_user_friends_json);
     }
 
     getUser() {
@@ -39,6 +48,10 @@ export class LocalStorageRepository {
 
     removeUser() {
         return this.storage.remove(this.app_user_json);
+    }
+
+    removeFriends() {
+        return this.storage.remove(this.app_user_friends_json);
     }
 
     clearStorage() {
