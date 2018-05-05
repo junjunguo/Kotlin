@@ -1,6 +1,6 @@
 import { AccessTokenModel } from './../models/access-token.model';
 import { AccessTokenEnum } from './../models/enums/access-token.enum';
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 import { Storage } from '@ionic/storage';
 import { UserModel } from '../models/user.model';
@@ -9,52 +9,52 @@ import { FriendModel } from '../models/friend.model';
 @Injectable()
 export class LocalStorageRepository {
 
-    private readonly app_user_json = "app_user_json";
-    private readonly app_user_friends_json = "app_user_friends_json";
-    private readonly app_access_token_json = "app_access_token_json";
+    private readonly appUserJson = 'app_user_json';
+    private readonly appUserFriendsJson = 'app_user_friends_json';
+    private readonly appAccessTokenJson = 'app_access_token_json';
 
     constructor(private storage: Storage) { }
 
-    saveAccessToken(token: AccessTokenModel) {
-        return this.storage.set(this.app_access_token_json, JSON.stringify(token));
+    getFriends(): Promise<FriendModel[]> {
+        return this.storage.get(this.appUserFriendsJson);
     }
 
-    saveUser(user: UserModel) {
-        return this.storage.set(this.app_user_json, JSON.stringify(user));
-    }
-    saveFriends(friends: FriendModel[]) {
-        return this.storage.set(this.app_user_friends_json, JSON.stringify(friends));
+    getUser(): Promise<UserModel> {
+        return this.storage.get(this.appUserJson);
     }
 
-    getFriends() {
-        return this.storage.get(this.app_user_friends_json);
+    getAccessToken(): Promise<AccessTokenModel> {
+        return this.storage.get(this.appAccessTokenJson);
     }
 
-    getUser() {
-        return this.storage.get(this.app_user_json);
+    // getByKey(key: string): Promise<any> {
+    //     return this.storage.get(key);
+    // }
+
+    saveAccessToken(token: AccessTokenModel): Promise<void> {
+        return this.storage.set(this.appAccessTokenJson, JSON.stringify(token));
     }
 
-    getAccessToken() {
-        return this.storage.get(this.app_access_token_json);
+    saveUser(user: UserModel): Promise<void> {
+        return this.storage.set(this.appUserJson, JSON.stringify(user));
+    }
+    saveFriends(friends: FriendModel[]): Promise<void> {
+        return this.storage.set(this.appUserFriendsJson, JSON.stringify(friends));
     }
 
-    getByKey(key: string) {
-        return this.storage.get(key);
+    removeAccessToken(): Promise<void> {
+        return this.storage.remove(this.appAccessTokenJson);
     }
 
-    removeAccessToken() {
-        return this.storage.remove(this.app_access_token_json);
+    removeUser(): Promise<void> {
+        return this.storage.remove(this.appUserJson);
     }
 
-    removeUser() {
-        return this.storage.remove(this.app_user_json);
+    removeFriends(): Promise<void> {
+        return this.storage.remove(this.appUserFriendsJson);
     }
 
-    removeFriends() {
-        return this.storage.remove(this.app_user_friends_json);
-    }
-
-    clearStorage() {
+    clearStorage(): Promise<void> {
         return this.storage.clear();
     }
 }

@@ -1,31 +1,44 @@
-import { BehaviorSubject } from "rxjs";
-import { Injectable } from "@angular/core";
+import { AuthenticationService } from './authentication.service';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core';
 
-import { FriendModel } from "../models/friend.model";
+import { FriendModel } from '../models/friend.model';
 import { FriendRepository } from './../repositories/friend.repository';
 import { LocalStorageRepository } from './../repositories/local-storage.repository';
 
 @Injectable()
 export class FriendService {
 
+    friends = new BehaviorSubject<FriendModel[]>(undefined);
+
     private friendModels: FriendModel[];
 
-    friends = new BehaviorSubject<FriendModel[]>(null);
-
     constructor(
+        private auth: AuthenticationService,
         private friendRepo: FriendRepository,
         private localStoreRepo: LocalStorageRepository
     ) {
-        this.localStoreRepo.getFriends()
-            .then(res => {
-                if (res) {
-                    this.friendModels = JSON.parse(res);
+        this.auth.isLoggedIn
+            .subscribe(loggedIn => {
+                if (loggedIn)
+                    this.localStoreRepo.getFriends()
+                        .then(res => {
+                            if (res) {
+                                this.friendModels = res;
+                                this.friends.next(this.friendModels);
+                            } else
+                                this.getFriends()
+                                    .subscribe();
+                        });
+                else {
+                    this.friendModels = undefined;
                     this.friends.next(this.friendModels);
                 }
             });
     }
 
-    getFriends() {
+    getFriends(): Observable<FriendModel[]> {
         return this.friendRepo.getFriends()
             .do(res => {
                 this.friendModels = res;
@@ -33,15 +46,15 @@ export class FriendService {
             });
     }
 
-    addFriend(friendId: number) {
+    addFriend(friendId: number): Observable<FriendModel> {
         return this.friendRepo.addFriend(friendId);
     }
 
-    removeFriend(friendId: number) {
+    removeFriend(friendId: number): Observable<void> {
         return this.friendRepo.removeFriend(friendId);
     }
 
-    confirmFriend(friendId: number) {
+    confirmFriend(friendId: number): Observable<FriendModel> {
         return this.friendRepo.confirmFriend(friendId)
             .do(res => {
                 this.friendModels[this.friendModels.findIndex(x => x.id !== null && x.id === res.id)] = res;

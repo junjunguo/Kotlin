@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form *ngIf="user" #formCtrl="ngForm">
+    <div align="center" *ngIf="formCtrl.form.valid">
+
+      <h1>Profile</h1>
+      <img class="profile-image" src="assets/imgs/cat.jpg">
+      <h4>#{{user.id}}: {{user.name}} - {{user.email}}</h4>
+    </div>
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Name</ion-label>
+        <ion-input [disabled]="!isEditing" type="text" [(ngModel)]="editUser.name" name="name" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input [disabled]="!isEditing" type="text" [(ngModel)]="editUser.email" name="email" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>UUID</ion-label>
+        <ion-input [disabled]="true" type="text" [(ngModel)]="editUser.uuid" name="uuid"></ion-input>
+      </ion-item>
+<!-- 
+      <ion-item *ngIf="editUser.modified">
+        <ion-label>Last modified</ion-label>
+        <ion-datetime [disabled]="true" displayFormat="MMM.DD.YYYY HH:mm" pickerFormat="h mm A" [(ngModel)]="editUser.modified"></ion-datetime>
+      </ion-item>
+
+      <ion-item *ngIf="editUser.created">
+        <ion-label>Created</ion-label>
+        <ion-datetime [disabled]="true" displayFormat="MMM.DD.YYYY HH:mm" pickerFormat="h mm A" [(ngModel)]="editUser.created"></ion-datetime>
+      </ion-item> -->
+
+    </ion-list>
+    <button *ngIf="!isEditing" color="primary" ion-button block (click)="isEditing = true">Edit</button>
+    <button *ngIf="isEditing" color="secondary" [disabled]="!formCtrl.form.valid" ion-button block (click)="save()">Save</button>
+    <button *ngIf="isEditing" color="warning" ion-button block (click)="reset()">Cancel</button>
+  </form>
+</ion-content>

@@ -1,5 +1,6 @@
+import { UserLoginModel } from './../core/models/user-login.model';
 import { LocalStorageRepository } from './../core/repositories/local-storage.repository';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthenticationService } from './../core/services/authentication.service';
 import { AuthenticationRepository } from './../core/repositories/authentication.repository';
 import { BrowserModule } from '@angular/platform-browser';
@@ -10,29 +11,33 @@ import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { MyApp } from './app.component';
+import { AppComponent } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
-
+import { UserService } from '../core/services/user.service';
+import { FriendService } from '../core/services/friend.service';
+import { UserRepository } from '../core/repositories/user.repository';
+import { FriendRepository } from '../core/repositories/friend.repository';
+import { AuthInterceptor } from '../core/system/auth-interceptor';
 
 @NgModule({
   declarations: [
-    MyApp,
+    AppComponent,
     HomePage,
     ListPage
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(AppComponent),
     IonicStorageModule.forRoot({
-      name: '__mydb',
-         driverOrder: ['indexeddb', 'sqlite', 'websql']
+      name: 'frontenddb',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
     })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    AppComponent,
     HomePage,
     ListPage
   ],
@@ -40,9 +45,18 @@ import { ListPage } from '../pages/list/list';
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    LocalStorageRepository,
     AuthenticationRepository,
-    LocalStorageRepository
+    UserRepository,
+    FriendRepository,
+    AuthenticationService,
+    UserService,
+    FriendService,
   ]
 })
 export class AppModule { }

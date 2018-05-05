@@ -16,10 +16,8 @@ import { AuthenticationService } from '../services/authentication.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-    private readonly LOCAL_STORAGE_NAME = 'play_pulse_user_local_storage';
-
     constructor(
-        private nav: NavController,
+        // private nav: NavController,
         private auth: AuthenticationService
     ) { }
 
@@ -33,13 +31,14 @@ export class AuthInterceptor implements HttpInterceptor {
             });
         }
 
-        return next.handle(authReq).do(() => {
-        }, err => {
-            if (err instanceof HttpErrorResponse) {
-                if (err.status === 401) {
-                    this.nav.setRoot(LoginPage);
+        return next.handle(authReq)
+            .do(() => {
+            }, err => {
+                if (err instanceof HttpErrorResponse) {
+                    if (err.status === 401) {
+                        // this.nav.setRoot('LoginPage');
+                    }
                 }
-            }
-        });
+            });
     }
 }

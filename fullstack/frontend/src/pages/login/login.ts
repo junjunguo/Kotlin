@@ -1,6 +1,6 @@
 import { AuthenticationService } from './../../core/services/authentication.service';
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams, MenuController } from 'ionic-angular';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AlertController, IonicPage, Loading, LoadingController, MenuController, NavController, NavParams } from 'ionic-angular';
 import { UserLoginModel } from '../../core/models/user-login.model';
 import { HomePage } from '../home/home';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ export class LoginPage {
 
   loading: Loading;
   model: UserLoginModel = { username: '', password: '' };
-   subscription : Subscription;
+  subscription: Subscription;
 
   constructor(
     public nav: NavController,
@@ -27,17 +27,17 @@ export class LoginPage {
     private cdr: ChangeDetectorRef) {
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter(): void {
     this.subscription = this.auth.isLoggedIn
       .subscribe(isLoggedIn => {
         if (isLoggedIn) {
           this.nav.setRoot(HomePage);
           this.menCtr.enable(true);
         }
-      })
+      });
   }
 
-  ionViewWillLeave() {
+  ionViewWillLeave(): void {
     this.subscription.unsubscribe();
   }
 
@@ -50,7 +50,7 @@ export class LoginPage {
     this.auth.login(this.model)
       .finally(() => {
         this.cdr.markForCheck();
-        this.loading.dismiss
+        this.loading.dismiss();
       })
       .subscribe(value => {
         this.nav.setRoot(HomePage);

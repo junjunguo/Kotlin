@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Rx';
 import { FriendModel } from './../models/friend.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -11,19 +12,19 @@ export class FriendRepository {
     constructor(private http: HttpClient) {
     }
 
-    getFriends() {
-        return this.http.get<FriendModel[]>(`${this.http}all`)
+    getFriends(): Observable<FriendModel[]> {
+        return this.http.get<FriendModel[]>(`${this.http}all`);
     }
 
-    addFriend(friendId: number) {
-        return this.http.post<FriendModel>(`${this.baseUrl}add`, { friendId: friendId })
+    addFriend(friendId: number): Observable<FriendModel> {
+        return this.http.post<FriendModel>(`${this.baseUrl}add`, { friendId });
     }
 
-    removeFriend(friendId: number) {
-        return this.http.put<void>(`${this.baseUrl}remove`, { friendId: friendId })
+    removeFriend(friendId: number): Observable<void> {
+        return this.http.put<void>(`${this.baseUrl}remove`, { friendId });
     }
 
-    confirmFriend(friendId: number) {
-        return this.http.put<FriendModel>(`${this.baseUrl}confirm`, { friendId: friendId })
+    confirmFriend(friendId: number): Observable<FriendModel> {
+        return this.http.put<FriendModel>(`${this.baseUrl}confirm`, { friendId });
     }
 }

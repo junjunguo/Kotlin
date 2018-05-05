@@ -1,8 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/Rx';
-import { Subject, BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 
 import { UserLoginModel } from '../models/user-login.model';
 import { AccessTokenModel } from '../models/access-token.model';
@@ -13,9 +11,9 @@ import { AuthenticationRepository } from './../repositories/authentication.repos
 @Injectable()
 export class AuthenticationService {
 
-  private authModel: AccessTokenModel;
-
   isLoggedIn = new BehaviorSubject<boolean>(false);
+
+  private authModel: AccessTokenModel;
 
   constructor(
     private authRepo: AuthenticationRepository,
@@ -24,17 +22,17 @@ export class AuthenticationService {
     this.localStoreRepo.getAccessToken()
       .then(res => {
         if (res) {
-          this.authModel = JSON.parse(res);
+          this.authModel = res;
           this.isLoggedIn.next(true);
-        } else {
+        } else
           this.logout();
-        }
-      }).catch(err => {
+      })
+      .catch(err => {
         this.logout();
       });
   }
 
-  getAuthModel() {
+  getAuthModel(): AccessTokenModel {
     return this.authModel;
   }
 
@@ -47,8 +45,8 @@ export class AuthenticationService {
       }, err => this.logout());
   }
 
-  logout() {
-    this.authModel = null;
+  logout(): void {
+    this.authModel = undefined;
     this.isLoggedIn.next(false);
     this.localStoreRepo.clearStorage();
   }

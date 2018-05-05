@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { AuthenticationService } from '../../core/services/authentication.service';
 
 @IonicPage()
@@ -11,40 +11,37 @@ import { AuthenticationService } from '../../core/services/authentication.servic
 export class RegisterPage {
 
   loading: Loading;
-  model = { name: "", password: "", email: "" }
+  model = { name: '', password: '', email: '' };
   createSuccess = false;
 
   constructor(
-    public nav: NavController,
-    public navParams: NavParams,
-    public loadingCtrl: LoadingController,
-    private auth: AuthenticationService,
+    private nav: NavController,
+    private navParams: NavParams,
+    private cdr: ChangeDetectorRef,
     private alertCtrl: AlertController,
-    private cdr: ChangeDetectorRef) {
+    private auth: AuthenticationService,
+    private loadingCtrl: LoadingController
+  ) {
   }
+  register(): void {
+    if (!this.model || !this.model.name || !this.model.password) return;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RegisterPage');
-  }
-
-  register() {
-    if (!this.model || !this.model.name || !this.model.password) { return; }
     this.showLoading();
     this.auth.register(this.model)
       .finally(() => {
         this.cdr.markForCheck();
-        this.loading.dismiss()
+        this.loading.dismiss();
       })
       .subscribe(res => {
         this.createSuccess = true;
-        this.showPopup("Success", "Account created.");
+        this.showPopup('Success', 'Account created.');
       },
         error => {
-          this.showPopup("Error", error.message);
+          this.showPopup('Error', error.message);
         });
   }
 
-  login() {
+  login(): void {
     this.nav.push('LoginPage');
   }
 
@@ -56,17 +53,17 @@ export class RegisterPage {
     this.loading.present();
   }
 
-  showPopup(title, text) {
-    let alert = this.alertCtrl.create({
-      title: title,
+  showPopup(title, text): void {
+    const alert = this.alertCtrl.create({
+      title,
       subTitle: text,
       buttons: [
         {
           text: 'OK',
           handler: data => {
-            if (this.createSuccess) {
+            if (this.createSuccess)
               this.nav.popToRoot();
-            }
+
           }
         }
       ]
