@@ -46,6 +46,7 @@ export class LoginPage {
   }
 
   login(): void {
+    if (!this.model.password && !this.model.username) return;
     this.showLoading();
     this.auth.login(this.model)
       .finally(() => {

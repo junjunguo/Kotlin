@@ -19,17 +19,27 @@ export class AuthenticationRepository {
   }
 
   login(login: UserLoginModel): Observable<AccessTokenModel> {
-
-    const headers = new HttpHeaders()
-      .set('Authorization', `Basic ${this.basicHeader}`)
-      .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-
     const body = `grant_type=password&username=${login.username}&password=${login.password}`;
 
-    return this.httpClient.post<AccessTokenModel>(this.authUrl, body, { headers });
+    return this.httpClient.post<AccessTokenModel>(this.authUrl, body, this.getOptionsForNewToken());
+  }
+
+  renewAccessToken(refreshToken: string): Observable<AccessTokenModel> {
+    const body = `grant_type=refresh_token&refresh_token=${refreshToken}`;
+
+    return this.httpClient.post<AccessTokenModel>(this.authUrl, body, this.getOptionsForNewToken());
   }
 
   register(model: UserRegisterModel): Observable<void> {
     return this.httpClient.post<void>(`${this.baseUrl}auth/register`, model);
+  }
+
+  private getOptionsForNewToken() {
+    const headers = new HttpHeaders()
+      .set('Authorization', `Basic ${this.basicHeader}`)
+      .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    return {
+      headers: headers
+    }
   }
 }

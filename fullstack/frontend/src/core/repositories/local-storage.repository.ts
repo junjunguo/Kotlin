@@ -1,8 +1,7 @@
-import { AccessTokenModel } from './../models/access-token.model';
-import { AccessTokenEnum } from './../models/enums/access-token.enum';
+import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
 
-import { Storage } from '@ionic/storage';
+import { AccessTokenModel } from './../models/access-token.model';
 import { UserModel } from '../models/user.model';
 import { FriendModel } from '../models/friend.model';
 
@@ -15,15 +14,15 @@ export class LocalStorageRepository {
 
     constructor(private storage: Storage) { }
 
-    getFriends(): Promise<FriendModel[]> {
+    getFriends(): Promise<string> {
         return this.storage.get(this.appUserFriendsJson);
     }
 
-    getUser(): Promise<UserModel> {
+    getUser(): Promise<string> {
         return this.storage.get(this.appUserJson);
     }
 
-    getAccessToken(): Promise<AccessTokenModel> {
+    getAccessToken(): Promise<string> {
         return this.storage.get(this.appAccessTokenJson);
     }
 

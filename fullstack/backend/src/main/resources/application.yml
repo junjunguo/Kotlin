@@ -56,8 +56,8 @@ security:
   jwt:
     web-client-id: testClientId
     web-client-secret: testClientSecret
-    web-access-token-validity-seconds: 3600
-    web-refresh-token-validity-seconds: 86400
+    web-access-token-validity-seconds: 30
+    web-refresh-token-validity-seconds: 120
     native-client-id: nativeClientId
     native-client-secret: nativeClientSecret
     native-access-token-validity-seconds: 86400 # 3600 * 24

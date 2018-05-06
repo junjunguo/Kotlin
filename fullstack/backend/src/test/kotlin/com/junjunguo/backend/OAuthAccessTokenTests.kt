@@ -178,7 +178,7 @@ class OAuthAccessTokenTests {
     private fun getAccessTokenFromRefreshToken(refreshToken: String): Map<String, *> {
         val params = LinkedMultiValueMap<String, String>()
         params.add("grant_type", "refresh_token")
-        params.add("client_id", appWebClientId)
+//        params.add("client_id", appWebClientId)
         params.add("refresh_token", refreshToken)
 
         val result = mockMvc.perform(

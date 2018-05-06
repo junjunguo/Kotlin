@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { UserLoginModel } from '../models/user-login.model';
 import { AccessTokenModel } from '../models/access-token.model';
@@ -22,7 +22,7 @@ export class AuthenticationService {
     this.localStoreRepo.getAccessToken()
       .then(res => {
         if (res) {
-          this.authModel = res;
+          this.authModel = JSON.parse(res);
           this.isLoggedIn.next(true);
         } else
           this.logout();
@@ -30,6 +30,10 @@ export class AuthenticationService {
       .catch(err => {
         this.logout();
       });
+  }
+
+  accessTokenExpired() {
+    this.authModel.access_token = undefined;
   }
 
   getAuthModel(): AccessTokenModel {
@@ -45,9 +49,20 @@ export class AuthenticationService {
       }, err => this.logout());
   }
 
+  renewAccessToken(): Observable<AccessTokenModel> {
+    if (!this.authModel || !this.authModel.refresh_token) return Observable.of(undefined);
+
+    else return this.authRepo.renewAccessToken(this.authModel.refresh_token)
+      .do(res => {
+        this.authModel = res;
+        this.isLoggedIn.next(true);
+        this.localStoreRepo.saveAccessToken(this.authModel);
+      });
+  }
+
   logout(): void {
-    this.authModel = undefined;
     this.isLoggedIn.next(false);
+    this.authModel = undefined;
     this.localStoreRepo.clearStorage();
   }
 

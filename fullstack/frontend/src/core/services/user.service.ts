@@ -1,11 +1,11 @@
-import { Observable } from 'rxjs/Observable';
-import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
-import { LocalStorageRepository } from './../repositories/local-storage.repository';
-import { UserRepository } from './../repositories/user.repository';
 import { UserModel } from '../models/user.model';
 import { AuthenticationService } from './authentication.service';
+import { UserRepository } from './../repositories/user.repository';
+import { LocalStorageRepository } from './../repositories/local-storage.repository';
 
 @Injectable()
 export class UserService {
@@ -19,23 +19,20 @@ export class UserService {
     ) {
         this.auth.isLoggedIn.subscribe(
             loggedIn => {
-                if (loggedIn)
-                    this.localStoreRepo.getUser()
-                        .then(res => {
-                            if (res)
-                                this.currentUser.next(res);
-                            else this.getUserModel()
-                                .subscribe();
-                        })
-                        .catch(err => {
-                            this.localStoreRepo.removeUser()
-                                .then(() =>
-                                    this.getUserModel()
-                                        .subscribe()
-                                );
-                        });
+                if (loggedIn) this.loadUser();
                 else this.currentUser.next(undefined);
             });
+    }
+
+    private loadUser(): void {
+        this.localStoreRepo.getUser()
+            .then(res => {
+                if (res) this.currentUser.next(JSON.parse(res));
+                else this.getUserModel().subscribe();
+            }).catch(err => {
+                this.localStoreRepo.removeUser()
+                    .then(() => this.getUserModel().subscribe())
+            })
     }
 
     getUserModel(): Observable<UserModel> {

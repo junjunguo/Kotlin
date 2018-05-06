@@ -21,21 +21,22 @@ export class FriendService {
     ) {
         this.auth.isLoggedIn
             .subscribe(loggedIn => {
-                if (loggedIn)
-                    this.localStoreRepo.getFriends()
-                        .then(res => {
-                            if (res) {
-                                this.friendModels = res;
-                                this.friends.next(this.friendModels);
-                            } else
-                                this.getFriends()
-                                    .subscribe();
-                        });
+                if (loggedIn) this.loadFriends();
                 else {
                     this.friendModels = undefined;
                     this.friends.next(this.friendModels);
                 }
             });
+    }
+
+    private loadFriends(): void {
+        this.localStoreRepo.getFriends()
+            .then(res => {
+                if (res) {
+                    this.friendModels = JSON.parse(res);
+                    this.friends.next(this.friendModels);
+                } else this.getFriends().subscribe();
+            })
     }
 
     getFriends(): Observable<FriendModel[]> {
