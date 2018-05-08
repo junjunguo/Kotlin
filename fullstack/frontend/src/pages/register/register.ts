@@ -1,17 +1,28 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
-import { AuthenticationService } from '../../core/services/authentication.service';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component
+} from "@angular/core";
+import {
+  AlertController,
+  IonicPage,
+  Loading,
+  LoadingController,
+  NavController,
+  NavParams
+} from "ionic-angular";
+import { AuthenticationService } from "../../core/services/authentication.service";
+import { UserRegisterModel } from "../../core/models/user-register.model";
 
 @IonicPage()
 @Component({
-  selector: 'page-register',
-  templateUrl: 'register.html',
+  selector: "page-register",
+  templateUrl: "./register.html",
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterPage {
-
   loading: Loading;
-  model = { name: '', password: '', email: '' };
+  model: UserRegisterModel = { name: "", password: "", email: "" };
   createSuccess = false;
 
   constructor(
@@ -21,33 +32,36 @@ export class RegisterPage {
     private alertCtrl: AlertController,
     private auth: AuthenticationService,
     private loadingCtrl: LoadingController
-  ) {
-  }
+  ) {}
   register(): void {
     if (!this.model || !this.model.name || !this.model.password) return;
 
     this.showLoading();
-    this.auth.register(this.model)
+    this.auth
+      .register(this.model)
       .finally(() => {
         this.cdr.markForCheck();
         this.loading.dismiss();
       })
-      .subscribe(res => {
-        this.createSuccess = true;
-        this.showPopup('Success', 'Account created.');
-      },
+      .subscribe(
+        res => {
+          this.createSuccess = true;
+          this.showPopup("Success", "Account created.");
+          this.model = { name: "", password: "", email: "" };
+        },
         error => {
-          this.showPopup('Error', error.message);
-        });
+          this.showPopup("Error", error.message);
+        }
+      );
   }
 
   login(): void {
-    this.nav.push('LoginPage');
+    this.nav.push("LoginPage");
   }
 
   showLoading(): void {
     this.loading = this.loadingCtrl.create({
-      content: 'Please wait...',
+      content: "Please wait...",
       dismissOnPageChange: true
     });
     this.loading.present();
@@ -59,11 +73,9 @@ export class RegisterPage {
       subTitle: text,
       buttons: [
         {
-          text: 'OK',
+          text: "OK",
           handler: data => {
-            if (this.createSuccess)
-              this.nav.popToRoot();
-
+            if (this.createSuccess) this.nav.popToRoot();
           }
         }
       ]

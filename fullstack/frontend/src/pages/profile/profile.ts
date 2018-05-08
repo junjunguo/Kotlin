@@ -1,84 +1,97 @@
-import { UserService } from './../../core/services/user.service';
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Loading, LoadingController, AlertController, IonicPage, Alert } from 'ionic-angular';
-import { UserModel } from '../../core/models/user.model';
-import { Subscription } from 'rxjs';
+import { UserService } from "./../../core/services/user.service";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from "@angular/core";
+import {
+  Loading,
+  LoadingController,
+  AlertController,
+  IonicPage,
+  Alert
+} from "ionic-angular";
+import { UserModel } from "../../core/models/user.model";
+import { Subscription } from "rxjs";
 @IonicPage()
 @Component({
-    selector: "page-profile",
-    templateUrl: "./profile.html",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "page-profile",
+  templateUrl: "./profile.html",
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfilePage {
+  user: UserModel;
+  editUser: UserModel;
+  isEditing = false;
+  loading: Loading;
+  // alert: Alert;
+  private subscription: Subscription;
 
-    user: UserModel;
-    editUser: UserModel;
-    isEditing = false;
-    loading: Loading;
-    // alert: Alert;
-    private subscription: Subscription;
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private userService: UserService,
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController
+  ) {}
 
-    constructor(
-        private cdr: ChangeDetectorRef,
-        private userService: UserService,
-        public alertCtrl: AlertController,
-        public loadingCtrl: LoadingController,
-    ) {
-    }
+  ionViewWillEnter() {
+    this.subscription = this.userService.currentUser.subscribe(u => {
+      this.user = { ...u };
+      this.editUser = { ...u };
+      this.cdr.markForCheck();
+    });
+  }
+  ionViewDidLoad() {
+    this.showLoading();
+  }
 
-    ionViewWillEnter() {
-        this.subscription = this.userService.currentUser
-            .subscribe(u => {
-                this.user = { ...u };
-                this.editUser = { ...u }
-                this.cdr.markForCheck();
-            });
-    }
-    ionViewDidLoad() {
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
+  }
 
-        this.showLoading();
-    }
+  reset(): void {
+    this.isEditing = false;
+    this.editUser = { ...this.user };
+  }
 
-    ionViewWillLeave() {
-        this.subscription.unsubscribe();
-    }
+  save() {
+    if (
+      this.editUser.email === this.user.email &&
+      this.editUser.name === this.user.name
+    )
+      return;
+    this.showLoading();
+    this.userService
+      .updateUser(this.editUser)
+      .finally(() => {
+        this.loading.dismiss();
+        console.log("finally --- ");
+        this.cdr.markForCheck();
+      })
+      .subscribe(
+        res => {
+          this.isEditing = false;
+        },
+        err => {
+          // this.showError(err.message);
+          console.log(" -- - - - err -0-- ", err);
+        }
+      );
+  }
 
-    reset(): void {
-        this.isEditing = false;
-        this.editUser = { ...this.user }
-    }
+  showLoading(): void {
+    this.loading = this.loadingCtrl.create({
+      content: "Please wait...",
+      dismissOnPageChange: true
+    });
+    this.loading.present();
+  }
 
-    save() {
-        if (this.editUser.email === this.user.email && this.editUser.name === this.user.name) return;
-        this.showLoading();
-        this.userService
-            .updateUser(this.editUser)
-            .finally(() => {
-                this.loading.dismiss();
-                console.log("finally --- ")
-                this.cdr.markForCheck();
-            })
-            .subscribe(res => {
-                this.isEditing = false;
-            }, err => {
-                // this.showError(err.message);
-                console.log(" -- - - - err -0-- ", err);
-            });
-    }
-
-    showLoading(): void {
-        this.loading = this.loadingCtrl.create({
-            content: 'Please wait...',
-            dismissOnPageChange: true
-        });
-        this.loading.present();
-    }
-
-    // showError(text): void {
-    //     const alert = this.alertCtrl.create({
-    //         title: 'Fail',
-    //         subTitle: text,
-    //         buttons: ['OK']
-    //     });
-    // }
+  // showError(text): void {
+  //     const alert = this.alertCtrl.create({
+  //         title: 'Fail',
+  //         subTitle: text,
+  //         buttons: ['OK']
+  //     });
+  // }
 }

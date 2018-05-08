@@ -1,61 +1,52 @@
-import { Subscription } from 'rxjs';
-import { Component, ViewChild } from '@angular/core';
-import { MenuController, Nav, Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { RegisterPage } from "./../pages/register/register";
+import { Subscription } from "rxjs";
+import { Component, ViewChild } from "@angular/core";
+import { MenuController, Nav, Platform } from "ionic-angular";
+import { StatusBar } from "@ionic-native/status-bar";
+import { SplashScreen } from "@ionic-native/splash-screen";
 
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { ProfilePage } from './../pages/profile/profile';
-import { AuthenticationService } from './../core/services/authentication.service';
+import { HomePage } from "../pages/home/home";
+import { ListPage } from "../pages/list/list";
+import { ProfilePage } from "./../pages/profile/profile";
+import { AuthenticationService } from "./../core/services/authentication.service";
+import { LoginPage } from "../pages/login/login";
 
 @Component({
-  templateUrl: 'app.component.html'
+  templateUrl: "app.component.html"
 })
 export class AppComponent {
-
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = 'LoginPage';
-  profilePage: any = 'ProfilePage';
+  rootPage: any = "LoginPage";
+  profilePage: any = "ProfilePage";
 
-  pages: Array<{ title: string, component: any }>;
-
-  subscription: Subscription;
+  pages: Array<{ title: string; component: any }>;
 
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public menuCtr: MenuController,
-    private auth: AuthenticationService) {
+    private auth: AuthenticationService
+  ) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: "Home", component: HomePage },
+      { title: "List", component: ListPage }
     ];
-
   }
 
   initializeApp(): void {
-    this.platform.ready()
-      .then(() => {
-        // Okay, so the platform is ready and our plugins are available.
-        // Here you can do any higher level native things you might need.
-        this.statusBar.styleDefault();
-        this.splashScreen.hide();
+    this.platform.ready().then(() => {
+      // Okay, so the platform is ready and our plugins are available.
+      // Here you can do any higher level native things you might need.
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
 
-        console.log("subscription app")
-        this.subscription = this.auth.isLoggedIn.subscribe(loggedIn => {
-          console.log("app - ", loggedIn);
-          if (!loggedIn) { this.logout() }
-          else if (loggedIn && this.auth.getAuthModel()) {
-            this.menuCtr.enable(false);
-          }
-        });
-      });
+      this.authHandler();
+    });
   }
 
   onOpenPage(page): void {
@@ -65,7 +56,7 @@ export class AppComponent {
   }
 
   onOpenProfile(): void {
-    this.nav.setRoot('ProfilePage');
+    this.nav.setRoot("ProfilePage");
   }
 
   onLogout(): void {
@@ -73,13 +64,29 @@ export class AppComponent {
     this.logout();
   }
 
+  private authHandler() {
+    console.log("app - subscription start ... ");
+    this.auth.isLoggedIn.subscribe(loggedIn => {
+      console.log("app - logged in ", loggedIn);
+      if (!loggedIn) {
+        this.logout();
+      } else if (loggedIn && this.auth.getAuthModel()) {
+        this.menuCtr.enable(false);
+      }
+    });
+  }
+
   private logout(): void {
-    if (!this.isOnPublicPage) this.nav.setRoot(this.rootPage);
+    if (!this.isOnPublicPage()) this.nav.setRoot(this.rootPage);
     this.menuCtr.enable(false);
   }
 
   private isOnPublicPage() {
-    console.log(this.nav.getActive.name);
-    return this.nav.getActive.name == 'RegisterPage';
+    if (this.nav && this.nav.getActive() && this.nav.getActive().name) {
+      console.log("this.nav.getActive().name,", this.nav.getActive().name);
+      const activePage = this.nav.getActive().name;
+      return activePage === "RegisterPage" || activePage === "LoginPage";
+    }
+    return false;
   }
 }
