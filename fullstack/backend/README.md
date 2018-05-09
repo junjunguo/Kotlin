@@ -210,3 +210,13 @@ Or, if you don't want/need a background service you can just run:
 
 ##### 6. grant all privileges:
 - `GRANT ALL PRIVILEGES ON DATABASE backend_db TO junjunguo;`
+
+mac Postgres error: 
+
+```
+psql: could not connect to server: No such file or directory
+	Is the server running locally and accepting
+	connections on Unix domain socket "/tmp/.s.PGSQL.5432"?
+```
+
+fix: `rm /usr/local/var/postgres/postmaster.pid`

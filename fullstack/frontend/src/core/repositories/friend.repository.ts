@@ -11,7 +11,7 @@ export class FriendRepository {
   constructor(private http: HttpClient) {}
 
   getFriends(): Observable<FriendModel[]> {
-    return this.http.get<FriendModel[]>(`${this.http}all`);
+    return this.http.get<FriendModel[]>(`${this.baseUrl}all`);
   }
 
   addFriend(friendId: number): Observable<FriendModel> {

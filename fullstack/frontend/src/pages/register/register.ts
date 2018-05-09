@@ -11,6 +11,7 @@ import {
   NavController,
   NavParams
 } from "ionic-angular";
+
 import { AuthenticationService } from "../../core/services/authentication.service";
 import { UserRegisterModel } from "../../core/models/user-register.model";
 

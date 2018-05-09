@@ -63,6 +63,12 @@ class UserFriendServiceImpl(
         } else throw BadRequestException(translateService.translate("ex.permission_denied"))
     }
 
-    override fun getAllFriends(userId: Long) =
-        friendRepository.findFriends(userId).get().map { it -> FriendUtil.getFriendModel(it, userId) }
+    override fun getAllFriends(userId: Long): List<FriendModel> {
+        return try {
+            friendRepository.findFriends(userId).get().map { it -> FriendUtil.getFriendModel(it, userId) }
+        } catch (e: NoSuchElementException) {
+            emptyList()
+        }
+
+    }
 }

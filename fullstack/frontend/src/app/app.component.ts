@@ -1,11 +1,13 @@
-import { RegisterPage } from "./../pages/register/register";
+import { FriendPage } from "./../pages/friend/friend";
 import { Subscription } from "rxjs";
 import { Component, ViewChild } from "@angular/core";
+
 import { MenuController, Nav, Platform } from "ionic-angular";
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 
 import { HomePage } from "../pages/home/home";
+import { RegisterPage } from "./../pages/register/register";
 import { ListPage } from "../pages/list/list";
 import { ProfilePage } from "./../pages/profile/profile";
 import { AuthenticationService } from "./../core/services/authentication.service";
@@ -34,7 +36,9 @@ export class AppComponent {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: "Home", component: HomePage },
-      { title: "List", component: ListPage }
+      { title: "List", component: ListPage },
+      { title: "Profile", component: "ProfilePage" },
+      { title: "Friend", component: "FriendPage" }
     ];
   }
 
@@ -55,9 +59,9 @@ export class AppComponent {
     this.nav.setRoot(page.component);
   }
 
-  onOpenProfile(): void {
-    this.nav.setRoot("ProfilePage");
-  }
+  // onOpenProfile(): void {
+  //   this.nav.setRoot("ProfilePage");
+  // }
 
   onLogout(): void {
     this.auth.logout();

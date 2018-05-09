@@ -17,5 +17,4 @@ data class ApiErrorModel(
         LocalDateTime.now(), status, error, message, errors
     )
 
-//    constructor() : this(null, null, null, null, null)
 }

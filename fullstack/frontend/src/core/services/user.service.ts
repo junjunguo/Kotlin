@@ -49,4 +49,8 @@ export class UserService {
       this.localStoreRepo.saveUser(res);
     });
   }
+
+  getAllUsers(): Observable<UserModel[]> {
+    return this.userRepo.getAllUsers();
+  }
 }

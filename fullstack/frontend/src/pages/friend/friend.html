@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Friends</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item *ngFor="let friend of friends">
+      <ion-label *ngIf="friend?.id" floating>{{friend.id}}</ion-label>
+      <ion-label *ngIf="friend?.name" floating>{{friend.name}}</ion-label>
+      <ion-label *ngIf="friend?.email" floating>{{friend.email}}</ion-label>
+      <ion-label *ngIf="friend?.status" floating>{{friend.status}}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <button ion-button full (click)="onAddFriend()">Add Friend</button>
+</ion-content>

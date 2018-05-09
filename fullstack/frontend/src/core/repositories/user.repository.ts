@@ -16,4 +16,8 @@ export class UserRepository {
   updateUser(user: UserModel): Observable<UserModel> {
     return this.http.put<UserModel>(`${this.baseUrl}update`, user);
   }
+
+  getAllUsers(): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(`${this.baseUrl}all`);
+  }
 }

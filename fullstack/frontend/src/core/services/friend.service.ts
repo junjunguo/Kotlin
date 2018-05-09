@@ -9,25 +9,26 @@ import { LocalStorageRepository } from "./../repositories/local-storage.reposito
 
 @Injectable()
 export class FriendService {
-  friends = new BehaviorSubject<FriendModel[]>(undefined);
+  friends = new BehaviorSubject<FriendModel[]>([]);
 
-  private friendModels: FriendModel[];
+  private friendModels: FriendModel[] = [];
 
   constructor(
     private auth: AuthenticationService,
     private friendRepo: FriendRepository,
     private localStoreRepo: LocalStorageRepository
   ) {
-    this.auth.isLoggedIn.subscribe(loggedIn => {
-      if (loggedIn) this.loadFriends();
-      else {
-        this.friendModels = undefined;
-        this.friends.next(this.friendModels);
-      }
-    });
+    // load on start: ?
+    // this.auth.isLoggedIn.subscribe(loggedIn => {
+    //   if (loggedIn) this.loadFriends();
+    //   else {
+    //     this.friendModels = undefined;
+    //     this.friends.next(this.friendModels);
+    //   }
+    // });
   }
 
-  private loadFriends(): void {
+  loadFriends(): void {
     this.localStoreRepo.getFriends().then(res => {
       if (res) {
         this.friendModels = JSON.parse(res);

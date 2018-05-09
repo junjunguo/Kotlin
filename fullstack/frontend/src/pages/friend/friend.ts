@@ -9,69 +9,57 @@ import {
   LoadingController,
   AlertController,
   IonicPage,
-  Alert
+  Alert,
+  NavController
 } from "ionic-angular";
 import { UserModel } from "../../core/models/user.model";
 import { Subscription } from "rxjs";
+import { FriendService } from "../../core/services/friend.service";
+import { FriendModel } from "../../core/models/friend.model";
+import { FriendStatusEnum } from "../../core/models/enums/friend-status.enum";
 @IonicPage()
 @Component({
-  selector: "page-profile",
-  templateUrl: "./profile.html",
+  selector: "page-friend",
+  templateUrl: "./friend.html",
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfilePage {
-  user: UserModel;
-  editUser: UserModel;
-  isEditing = false;
+export class FriendPage {
+  friends: FriendModel[] = [];
+  requests: FriendModel[] = [];
+  pendings: FriendModel[] = [];
+
   loading: Loading;
-  // alert: Alert;
   private subscription: Subscription;
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private userService: UserService,
+    private friendService: FriendService,
+    private nav: NavController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController
   ) {}
 
   ionViewWillEnter() {
-    this.subscription = this.userService.currentUser.subscribe(u => {
-      this.user = { ...u };
-      this.editUser = { ...u };
+    this.friendService.loadFriends();
+    this.subscription = this.friendService.friends.subscribe(res => {
+      this.friends = [];
+      this.requests = [];
+      this.pendings = [];
+      for (const f of res) {
+        if (f.status === FriendStatusEnum.PENDING) {
+          this.pendings.push(f);
+        } else if (f.status === FriendStatusEnum.FRIEND_REQUEST_SENT) {
+          this.requests.push(f);
+        } else {
+          this.friends.push(f);
+        }
+      }
       this.cdr.markForCheck();
     });
   }
 
   ionViewWillLeave() {
     this.subscription.unsubscribe();
-  }
-
-  reset(): void {
-    this.isEditing = false;
-    this.editUser = { ...this.user };
-  }
-
-  save() {
-    if (
-      this.editUser.email === this.user.email &&
-      this.editUser.name === this.user.name
-    )
-      return;
-    this.showLoading();
-    this.userService
-      .updateUser(this.editUser)
-      .finally(() => {
-        this.loading.dismiss();
-        this.cdr.markForCheck();
-      })
-      .subscribe(
-        res => {
-          this.isEditing = false;
-        },
-        err => {
-          this.showError(err.message);
-        }
-      );
   }
 
   showLoading(): void {
@@ -88,5 +76,9 @@ export class ProfilePage {
       subTitle: text,
       buttons: ["OK"]
     });
+  }
+
+  onAddFriend(): void {
+    this.nav.setRoot("FindFriendPage");
   }
 }

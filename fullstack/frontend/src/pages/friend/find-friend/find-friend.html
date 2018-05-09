@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Find Friends</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ng-template ngFor let-user [ngForOf]="users">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="person"></ion-icon>
+        {{user.name}}
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>
+          <ion-icon name="key">
+            {{user.id}}
+          </ion-icon>
+        </p>
+        <p>
+          <ion-icon name="mail">
+            {{user.email}}
+          </ion-icon>
+        </p>
+        <p>
+          <ion-icon name="calendar">
+            {{user.created | date}}
+          </ion-icon>
+        </p>
+      </ion-card-content>
+
+      <ion-row>
+        <ion-col>
+          <button ion-button icon-left clear>
+            <ion-icon name="add-circle"></ion-icon>
+            <div>Send friend request</div>
+          </button>
+        </ion-col>
+      </ion-row>
+
+    </ion-card>
+  </ng-template>
+
+</ion-content>
