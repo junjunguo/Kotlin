@@ -81,4 +81,17 @@ export class FriendPage {
   onAddFriend(): void {
     this.nav.setRoot("FindFriendPage");
   }
+
+  onConfirmFriend(friend: FriendModel): void {
+    this.friendService.confirmFriend(friend.id).subscribe(
+      () => {},
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  friendsTrackByFn(index: number, item: FriendModel) {
+    return item.id;
+  }
 }

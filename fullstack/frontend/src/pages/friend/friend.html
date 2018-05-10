@@ -9,14 +9,101 @@
 
 <ion-content padding>
 
-  <ion-list>
-    <ion-item *ngFor="let friend of friends">
-      <ion-label *ngIf="friend?.id" floating>{{friend.id}}</ion-label>
-      <ion-label *ngIf="friend?.name" floating>{{friend.name}}</ion-label>
-      <ion-label *ngIf="friend?.email" floating>{{friend.email}}</ion-label>
-      <ion-label *ngIf="friend?.status" floating>{{friend.status}}</ion-label>
-    </ion-item>
-  </ion-list>
+  <ng-template ngFor let-pending [ngForOf]="pendings" [ngForTrackBy]="friendsTrackByFn">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon color="secondary" name="person"></ion-icon>
+        {{pending.name}}
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>
+          <ion-icon name="key">
+            {{pending.id}}
+          </ion-icon>
+        </p>
+        <p>
+          <ion-icon name="mail">
+            {{pending.email}}
+          </ion-icon>
+        </p>
+        <p>
+          <ion-icon color="secondary" name="person-add">
+            Pending
+          </ion-icon>
+        </p>
+      </ion-card-content>
+
+      <ion-row>
+        <ion-col>
+          <button color="secondary" ion-button icon-left clear (click)="onConfirmFriend(pending)">
+            <ion-icon name="person-add"></ion-icon>
+            <div>Confirm</div>
+          </button>
+        </ion-col>
+      </ion-row>
+
+    </ion-card>
+  </ng-template>
+
+  <ng-template ngFor let-friend [ngForOf]="friends" [ngForTrackBy]="friendsTrackByFn">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon color="primary" name="person"></ion-icon>
+        {{friend.name}}
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>
+          <ion-icon name="key">
+            {{friend.id}}
+          </ion-icon>
+        </p>
+        <p>
+          <ion-icon name="mail">
+            {{friend.email}}
+          </ion-icon>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <ng-template ngFor let-request [ngForOf]="requests" [ngForTrackBy]="friendsTrackByFn">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon color="warning" name="person"></ion-icon>
+        {{request.name}}
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>
+          <ion-icon name="key">
+            {{request.id}}
+          </ion-icon>
+        </p>
+        <p>
+          <ion-icon name="mail">
+            {{request.email}}
+          </ion-icon>
+        </p>
+        <p>
+          <ion-icon name="send">
+            Request sent
+          </ion-icon>
+        </p>
+      </ion-card-content>
+
+      <ion-row>
+        <ion-col>
+          <button color="warning" ion-button icon-left clear disabled>
+            <ion-icon name="glasses"></ion-icon>
+            <div>Waiting for response</div>
+          </button>
+        </ion-col>
+      </ion-row>
+
+    </ion-card>
+  </ng-template>
 
   <button ion-button full (click)="onAddFriend()">Add Friend</button>
 </ion-content>

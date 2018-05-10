@@ -41,15 +41,29 @@ export class FriendService {
     return this.friendRepo.getFriends().do(res => {
       this.friendModels = res;
       this.localStoreRepo.saveFriends(this.friendModels);
+      this.friends.next(this.friendModels);
     });
   }
 
   addFriend(friendId: number): Observable<FriendModel> {
-    return this.friendRepo.addFriend(friendId);
+    return this.friendRepo.addFriend(friendId).do(res => {
+      if (res && res.id) {
+        const index = this.friendModels.findIndex(f => f.id === res.id);
+        if (index > -1) {
+          this.friendModels[index] = res;
+        } else {
+          this.friendModels.push(res);
+        }
+        this.friends.next(this.friendModels);
+      }
+    });
   }
 
   removeFriend(friendId: number): Observable<void> {
-    return this.friendRepo.removeFriend(friendId);
+    return this.friendRepo.removeFriend(friendId).do(res => {
+      this.friendModels = this.friendModels.filter(f => f.id !== friendId);
+      this.friends.next(this.friendModels);
+    });
   }
 
   confirmFriend(friendId: number): Observable<FriendModel> {
