@@ -1,3 +1,4 @@
+import { Enviroment } from "./../system/enviroments";
 import { Observable } from "rxjs/Rx";
 import { FriendModel } from "./../models/friend.model";
 import { HttpClient } from "@angular/common/http";
@@ -6,7 +7,7 @@ import { UserModel } from "../models/user.model";
 
 @Injectable()
 export class FriendRepository {
-  readonly baseUrl = "http://localhost:8080/friend/";
+  readonly baseUrl = new Enviroment().baseUrl;
 
   constructor(private http: HttpClient) {}
 

@@ -36,7 +36,7 @@
 
       <ion-row>
         <ion-col>
-          <button ion-button icon-left clear (click)="addFriend(user)">
+          <button ion-button icon-left clear (click)="addFriend(user)" [disabled]="isLoading">
             <ion-icon name="person-add"></ion-icon>
             <div>Send friend request</div>
           </button>

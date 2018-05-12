@@ -65,6 +65,14 @@
           </ion-icon>
         </p>
       </ion-card-content>
+      <ion-row>
+        <ion-col>
+          <button color="danger" ion-button icon-left clear (click)="onRemoveFriend(friend)">
+            <ion-icon name="remove-circle"></ion-icon>
+            <div>Remove Friend</div>
+          </button>
+        </ion-col>
+      </ion-row>
     </ion-card>
   </ng-template>
 

@@ -1,3 +1,4 @@
+import { Enviroment } from "./../system/enviroments";
 import { AccessTokenModel } from "./../models/access-token.model";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -8,7 +9,7 @@ import { UserRegisterModel } from "../models/user-register.model";
 
 @Injectable()
 export class AuthenticationRepository {
-  readonly baseUrl = "http://localhost:8080/";
+  readonly baseUrl = new Enviroment().baseUrl;
   readonly authUrl = `${this.baseUrl}auth/token`;
   readonly clientId = "testClientId";
   readonly clientSecret = "testClientSecret";

@@ -1,3 +1,4 @@
+import { Enviroment } from "./../system/enviroments";
 import { Observable } from "rxjs/Rx";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -5,7 +6,7 @@ import { UserModel } from "../models/user.model";
 
 @Injectable()
 export class UserRepository {
-  readonly baseUrl = "http://localhost:8080/user/";
+  readonly baseUrl = new Enviroment().baseUrl;
 
   constructor(private http: HttpClient) {}
 

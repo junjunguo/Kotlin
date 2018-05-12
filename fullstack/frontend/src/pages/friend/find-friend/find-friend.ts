@@ -20,6 +20,9 @@ export class FindFriendPage {
   users: UserModel[] = [];
   friends: FriendModel[] = [];
   subscription: Subscription;
+  UserSubscription: Subscription;
+  user: UserModel;
+  isLoading = false;
   constructor(
     private userService: UserService,
     private friendService: FriendService,
@@ -27,6 +30,10 @@ export class FindFriendPage {
   ) {}
 
   ionViewWillEnter() {
+    this.UserSubscription = this.userService.currentUser.subscribe(u => {
+      this.user = u;
+      this.updateUsers();
+    });
     this.subscription = this.friendService.friends.subscribe(res => {
       this.friends = res;
       this.updateUsers();
@@ -48,13 +55,18 @@ export class FindFriendPage {
   }
 
   ionViewWillLeave() {
+    this.UserSubscription.unsubscribe();
     this.subscription.unsubscribe();
   }
 
   addFriend(user: UserModel) {
+    this.isLoading = true;
     this.friendService
       .addFriend(user.id)
-      .finally(() => this.cdr.markForCheck())
+      .finally(() => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      })
       .subscribe(res => {
         console.log("added friend ", res);
       });
@@ -65,7 +77,11 @@ export class FindFriendPage {
   }
 
   private updateUsers() {
-    this.users = this.users.filter(u => !this.friends.some(f => f.id === u.id));
+    this.users = this.users.filter(
+      u =>
+        !this.friends.some(f => f.id === u.id) &&
+        (this.user ? this.user.id !== u.id : true)
+    );
     this.cdr.markForCheck();
   }
 }

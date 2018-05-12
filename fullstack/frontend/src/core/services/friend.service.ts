@@ -60,7 +60,7 @@ export class FriendService {
   }
 
   removeFriend(friendId: number): Observable<void> {
-    return this.friendRepo.removeFriend(friendId).do(res => {
+    return this.friendRepo.removeFriend(friendId).do(() => {
       this.friendModels = this.friendModels.filter(f => f.id !== friendId);
       this.friends.next(this.friendModels);
     });

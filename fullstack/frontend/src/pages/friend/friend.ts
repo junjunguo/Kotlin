@@ -82,6 +82,15 @@ export class FriendPage {
     this.nav.setRoot("FindFriendPage");
   }
 
+  onRemoveFriend(friend: FriendModel): void {
+    this.friendService.removeFriend(friend.id).subscribe(
+      () => {},
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
   onConfirmFriend(friend: FriendModel): void {
     this.friendService.confirmFriend(friend.id).subscribe(
       () => {},
